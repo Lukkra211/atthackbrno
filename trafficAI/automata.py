@@ -94,7 +94,7 @@ class LinkPoint:
         self.register = 0
 
     def register_links(self, incomming: Link, outcomming: Link):
-        print(incomming,outcomming)
+        #print(incomming,outcomming)
         self.incomming.append(incomming)
         self.outcomming.append(outcomming)
         self.register += 2
@@ -290,3 +290,5 @@ def main():
     for i in range(90):
         test.step()
         input()
+if __name__ == "__main__":
+    main()

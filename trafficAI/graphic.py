@@ -40,7 +40,7 @@ link = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ]]
 
-minimap = [['a01', 'l01', 'a02']]
+minimap = [['a01'], ['l01'], ['a02']]
 connections = ['a01-l01', 'a02-l01']
 connectionsForCore = []
 for connection in connections:
@@ -112,7 +112,7 @@ class Presenter:
             core.step()
             self._redraw_links(core)
             pygame.display.flip()
-            time.sleep(0.08)
+            time.sleep(0.2)
 
     def _redraw_links(self, core):
         for link in core.links:
@@ -192,7 +192,7 @@ class Presenter:
         code = self.minimap[row][colm]
         x, y = Presenter._minimap_to_grid(code)
         # xy
-        if vector == (0, -1):
+        if vector == (0, 1):
             # up
             x += 2
             y -= 1
@@ -201,10 +201,10 @@ class Presenter:
             start_y = y
             vec = (0, -1)
             end_x = start_x + 2
-            end_y = y - 30
+            end_y = y - 29
             destcode = self.minimap[row-1][colm]
 
-        elif vector == (0, 1):
+        elif vector == (0, -1):
             # down
             x += 8
             y += 11
@@ -249,7 +249,7 @@ class Presenter:
 
 
 def main():
-    core = Core(minimap, connectionsForCore, 30)
+    core = Core(minimap, connectionsForCore, 5)
     core.spawn_vehicle()
     presenter = Presenter(connections, minimap, core, screensize)
     presenter.main_loop(core)
