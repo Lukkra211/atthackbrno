@@ -7,6 +7,8 @@ OBJECTS = {}
 
 class Presenter:
     def __init__(self, connections, minimap, core):
+        """This class will visualize the map and cars"""
+        self._init_window()
         self.connections = connections
         self.core = core
         self.minimap = minimap
@@ -19,7 +21,8 @@ class Presenter:
     def _process(self):
         for indexRow in range(len(self.minimap)):
             for indexColm in range(len(self.minimap[indexRow])):
-                self._draw_object(indexRow, indexColm,
+                x, y = self._minimap_to_grid(self.minimap[indexRow][indexColm])
+                self._draw_object(x, y,
                                   OBJECTS[self.minimap[indexRow][indexColm][0]])
                 self.point_location[self.minimap[indexRow]
                                     [indexColm]] = (indexRow, indexColm)
