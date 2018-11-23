@@ -2,24 +2,25 @@ from numpy import random
 import itertools
 from itertools import chain
 
-
-#CONSTANTS
+# CONSTANTS
 LINK_LEN = 30
 EMPTY_CELL = 0
 FULL_CELL = 1
 
-#test map part
+# test map part
 minimap = [
-        ['a01',  'l01',    'a02']
+    ['a01', 'l01', 'a02']
 ]
 
 connections = [
-            ['a01', 'j01']
-            ['a02', 'j01']
-            ]
+    ['a01', 'l01'],
+    ['a02', 'l01'],
+]
 
 vehicles = 20
-#end map part
+
+
+# end map part
 
 
 class Link:
@@ -42,7 +43,7 @@ class Link:
                 skip = False
                 continue
             if self.queue[i + 1] == FULL_CELL:
-                    self.stucked += 1
+                self.stucked += 1
             else:
                 skip = True
                 self.inactive = False
@@ -96,6 +97,7 @@ class LinkPoint:
         if self.register != 4:
             raise RuntimeError('LinkPoint got links instead of 4')
 
+
 class Point:
     def __init__(self, code):
         self.code = code
@@ -144,7 +146,6 @@ class JunctionPoint(Point):
         else:
             return False
 
-
     def register_links(self):
         pass
 
@@ -187,7 +188,7 @@ class Core:
                 continue
 
             point = Point(code=code)
-            self.point[code] = point
+            self.points[code] = point
 
             if code[0] == "a":
                 point.callback = self.spawn_vehicle
@@ -217,6 +218,7 @@ class Core:
 
         point1 = self.points[code1]
         point2 = self.points[code2]
+
         link1 = Link(source=point1, destination=point2)
         link2 = Link(source=point2, destination=point1)
 
@@ -226,8 +228,8 @@ class Core:
         if code2[0] == "j":
             self.junction_queues.append(point1)
 
-        point1.register_links(incoming=link1, outcoming = link2)
-        point2.register_links(incoming=link2, outcoming = link1)
+        point1.register_links(incomming=link1, outcomming=link2)
+        point2.register_links(incomming=link2, outcomming=link1)
 
     def finalize(self):
 
@@ -243,3 +245,8 @@ class Core:
 
         for point in self.points.values():
             point.step()
+
+
+# test part
+test = Core(minimap, connections, vehicles)
+test.step()
