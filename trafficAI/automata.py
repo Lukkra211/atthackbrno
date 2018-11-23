@@ -72,7 +72,8 @@ class Link:
         return empty
 
     def _redirect(self, *_):
-        return self.generate()
+        return False
+        #return self.generate()
 
     def si_empty(self, span: int = 1):
         return not any(self.queue[:span])
@@ -137,16 +138,14 @@ class AccessPoint(Point):
         self.to_generate += 1
 
     def step(self):
-        self.inactive = True
-        if self.to_generate == 0:
-            return False
-        if self.skip:
-            self.skip=False
+        if self.skip or self.to_generate == 0:
+            self.skip = False
             return
+        self.inactive = False
 
         for _ in range(len(self.outcomming)):
             possible_link = next(self.outcomming_cicle)
-            if possible_link._redirect:
+            if possible_link.generate():
                 self.to_generate -= 1
                 self.skip = True
                 return True
@@ -233,6 +232,7 @@ class Core:
 
     def spawn_vehicle(self):
         for _ in range(self.vehicles):
+
             random.choice(self.access_points).generate()
 
     def create_links(self, code1, code2):
@@ -263,15 +263,18 @@ class Core:
 
         for link in self.links:
             link.step()
+
         for access_point in self.access_points:
             access_point.step()
 
-
+        for link in self.links:
+            print(link.queue)
 # test part
 test = Core(minimap, connections, vehicles)
 for i in range(100):
 
     test.spawn_vehicle()
-for i in range(10):
+for i in range(100):
     test.step()
     input()
+
