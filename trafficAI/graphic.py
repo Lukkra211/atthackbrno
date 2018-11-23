@@ -90,6 +90,8 @@ class Presenter:
     def _process(self):
         for indexRow in range(len(self.minimap)):
             for indexColm in range(len(self.minimap[indexRow])):
+                if not self.minimap[indexRow][indexColm]:
+                    continue
                 x, y = Presenter._minimap_to_grid(
                     self.minimap[indexRow][indexColm])
                 Presenter._draw_object(x, y,
