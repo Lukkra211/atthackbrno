@@ -2,17 +2,27 @@ import pygame
 
 COLORS = [(0, 0, 0), (255, 255, 255), (0, 0, 0), (0, 0, 0)]
 LINK = [1, 0, 3, 0, 2, 0, 1]
+OBJECTS = {}
 
 
 class Presenter:
-    def __init__(self):
-        pass
+    def __init__(self, connections, minimap, core):
+        self.connections = connections
+        self.core = core
+        self.minimap = minimap
+        self._process()
+        self.point_location = {}
 
     def _init_window(self):
         pass
 
     def _process(self):
-        pass
+        for indexRow in range(len(self.minimap)):
+            for indexColm in range(len(self.minimap[indexRow])):
+                self._draw_object(indexRow, indexColm, OBJECTS[self.minimap[indexRow][indexColm][0]])
+                self.point_location[self.minimap[indexRow]
+                                    [indexColm]] = (indexRow, indexColm)
+        f
 
     def main_loop(self):
         pass
@@ -20,7 +30,7 @@ class Presenter:
     def _redraw_links(self):
         pass
 
-    def _minimap_to_grid(self):
+    def _minimap_to_grid(self, code):
         pass
 
     def _draw_object(self):
@@ -30,17 +40,14 @@ class Presenter:
         pass
 
     def _process_connection(self, source, destination):
-
+        """ Draw connections between the points"""
         colm, row, vect = self._get_source_info(source, destination)
-        x, y = self._calculate_start(colm, row, vect)
+        shift_x, shift_y = self._calculate_start(colm, row, vect)
 
         forward = '{}-{}'.format(source, destination)
         backwards = '{}-{}'.format(destination, source)
 
         for index in range(30):
-            shift_x = x
-            shift_y = y
-
             for i in range(len(LINK)):
                 if vect == (0, -1):
                     # up
@@ -58,14 +65,16 @@ class Presenter:
                     # right
                     self._draw_cell(shift_x+index, shift_y +
                                     i, COLORS[LINK[colm]])
+        pygame.display.flip()
 
     def _get_source_info(self, code1, code2):
+        """ Get info of the """
         source = self.point_location[code1]
         dest = self.point_location[code2]
 
         vector = (source[0] - dest[0], source[1] - dest[1])
         if vector not in [(0, 1), (1, 0), (-1, 0), (0, -1)]:
-            raise RuntimeError("Unexpected direction")
+            exit(1)
         return source[0], source[1], vector
 
     def _calculate_start(self, colm, row, vector):
