@@ -17,6 +17,11 @@ class Point:
 class AccessPoint(Point):
     def __init__(self, code):
         super().__init__(code)
+        self.callback = None
+
+    def _redirect(self, link):
+        self.callback()
+        return True
 
 
 class JunctionPoint(Point):
@@ -83,7 +88,7 @@ class Core:
             self.point[code] = point
 
             if code[0] == "a":
-                point.callback = self.spawn
+                point.callback = self.spawn_vehicle
                 self.access_points.append(point)
 
             if code[0] == "j":
