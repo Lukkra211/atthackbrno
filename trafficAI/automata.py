@@ -93,6 +93,7 @@ class LinkPoint:
 
     def lock(self):
         try:
+            print(self.incomming[0].destination, self.outcomming)
             self.incomming[0].destination = self.outcomming[1]
             self.incomming[1].destination = self.outcomming[0]
         except IndexError as e:
