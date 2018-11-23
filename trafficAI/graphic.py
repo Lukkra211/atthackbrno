@@ -2,45 +2,45 @@ import pygame
 import sys
 import os
 
-access =   [[0,0,1,1,1,1,1,1,1,0,0,],
-            [0,1,1,0,0,0,0,0,1,1,0,],
-            [1,1,0,0,0,0,0,0,0,1,1,],
-            [1,0,0,0,0,1,0,0,0,0,1,],
-            [1,0,0,0,1,1,1,0,0,0,1,],
-            [1,0,0,1,1,1,1,1,0,0,1,],
-            [1,0,0,0,1,1,1,0,0,0,1,],
-            [1,0,0,0,0,1,0,0,0,0,1,],
-            [1,1,0,0,0,0,0,0,0,1,1,],
-            [0,1,1,0,0,0,0,0,1,1,0,],
-            [0,0,1,1,1,1,1,1,1,0,0,]]
+access = [[0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, ],
+          [0, 1, 1, 0, 0, 0, 0, 0, 1, 1, 0, ],
+          [1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, ],
+          [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, ],
+          [1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1, ],
+          [1, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, ],
+          [1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1, ],
+          [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, ],
+          [1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, ],
+          [0, 1, 1, 0, 0, 0, 0, 0, 1, 1, 0, ],
+          [0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, ]]
 
-junction = [[1,1,1,1,1,1,1,1,1,1,1,],
-            [1,1,1,1,1,1,1,1,1,1,1,],
-            [1,1,1,1,1,1,1,1,1,1,1,],
-            [1,1,1,0,0,0,0,0,1,1,1,],
-            [1,1,1,0,1,1,1,0,1,1,1,],
-            [1,1,1,0,1,1,1,0,1,1,1,],
-            [1,1,1,0,1,1,1,0,1,1,1,],
-            [1,1,1,0,0,0,0,0,1,1,1,],
-            [1,1,1,1,1,1,1,1,1,1,1,],
-            [1,1,1,1,1,1,1,1,1,1,1,],
-            [1,1,1,1,1,1,1,1,1,1,1,]]
+junction = [[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, ],
+            [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, ],
+            [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, ],
+            [1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, ],
+            [1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, ],
+            [1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, ],
+            [1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, ],
+            [1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, ],
+            [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, ],
+            [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, ],
+            [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, ]]
 
-link     = [[0,0,0,0,0,0,0,0,0,0,0,],
-            [0,0,0,0,0,0,0,0,0,0,0,],
-            [0,0,1,1,1,1,1,1,1,0,0,],
-            [0,0,1,0,0,0,0,0,1,0,0,],
-            [0,0,1,0,0,1,0,0,1,0,0,],
-            [0,0,1,0,1,1,1,0,1,0,0,],
-            [0,0,1,0,0,1,0,0,1,0,0,],
-            [0,0,1,0,0,0,0,0,1,0,0,],
-            [0,0,1,1,1,1,1,1,1,0,0,],
-            [0,0,0,0,0,0,0,0,0,0,0,],
-            [0,0,0,0,0,0,0,0,0,0,0,]]
+link = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
+        [0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, ],
+        [0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, ],
+        [0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, ],
+        [0, 0, 1, 0, 1, 1, 1, 0, 1, 0, 0, ],
+        [0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, ],
+        [0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, ],
+        [0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, ],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ]]
 
-minimap =  [['a01', 'j01', 'a02'],
-            ['a03', 'j05', 'a07'],
-            ['a08', 'j10', 'a12']]
+minimap = [['a01', 'j01', 'a02'],
+           ['a03', 'j05', 'a07'],
+           ['a08', 'j10', 'a12']]
 
 check = 1
 for i in range(len(minimap)):
@@ -48,23 +48,34 @@ for i in range(len(minimap)):
         if len(minimap[i]) > check:
             check = len(minimap[i])
 
-#print(minimap[0][2])
+# print(minimap[0][2])
 cell_empty = 0
 cell_filled = 1
-black = (0,0,0)
-white = (255,255,255)
-cell_colors = {cell_filled: black,cell_empty: white}
+black = (0, 0, 0)
+white = (255, 255, 255)
+cell_colors = {cell_filled: black, cell_empty: white}
 
 length = 4
 size = (length, length)
 screensize = (((len(minimap)*41)-30), ((check*41)-30))
-#print(screensize[0],screensize[1])
+# print(screensize[0],screensize[1])
 
 """import minimap from somewhere"""
 
+COLORS = [(0, 0, 0), (255, 255, 255), (0, 0, 0), (0, 0, 0)]
+LINK = [1, 0, 3, 0, 2, 0, 1]
+OBJECTS = {}
+
+
 class Presenter:
-    def __init__(self):
-        pass
+    def __init__(self, connections, minimap, core):
+        """This class will visualize the map and cars"""
+        self._init_window()
+        self.connections = connections
+        self.core = core
+        self.minimap = minimap
+        self._process()
+        self.point_location = {}
 
     @staticmethod
     def _init_window(screensize):
@@ -74,8 +85,19 @@ class Presenter:
         screen = pygame.display.set_mode(screensize)
         screen.fill((255, 255, 255))
 
-    def process(self):
-        pass
+    def _process(self):
+        for indexRow in range(len(self.minimap)):
+            for indexColm in range(len(self.minimap[indexRow])):
+                x, y = self._minimap_to_grid(self.minimap[indexRow][indexColm])
+                self._draw_object(x, y,
+                                  OBJECTS[self.minimap[indexRow][indexColm][0]])
+                self.point_location[self.minimap[indexRow]
+                                    [indexColm]] = (indexRow, indexColm)
+
+        for row in self.connections:
+            for connection in row:
+                sorce, dest = connection.split(" - ")
+                self._process_connection(source=sorce, destination=dest)
 
     def main_loop(self):
         pass
@@ -110,18 +132,61 @@ class Presenter:
         pygame.draw.rect(pygame.display.get_surface(), color, rectangle)
         pygame.display.update()
 
-    def _process_connection(self):
-        pass
+    def _process_connection(self, source, destination):
+        """ Draw connections between the points"""
+        colm, row, vect = self._get_source_info(source, destination)
+        shift_x, shift_y = self._calculate_start(colm, row, vect)
 
-    def _get_source_info(self):
-        pass
+        forward = '{}-{}'.format(source, destination)
+        backwards = '{}-{}'.format(destination, source)
 
-    def _calculate_start(self):
-        pass
+        for index in range(30):
+            for i in range(len(LINK)):
+                if vect == (0, -1):
+                    # up
+                    self._draw_cell(shift_x+i, shift_y -
+                                    index, COLORS[LINK[colm]])
+                elif vect == (0, 1):
+                    # down
+                    self._draw_cell(shift_x-i, shift_y +
+                                    index, COLORS[LINK[colm]])
+                elif vect == (1, 0):
+                    # left
+                    self._draw_cell(shift_x-index, shift_y +
+                                    i, COLORS[LINK[colm]])
+                elif vect == (-1, 0):
+                    # right
+                    self._draw_cell(shift_x+index, shift_y +
+                                    i, COLORS[LINK[colm]])
+        pygame.display.flip()
 
+    def _get_source_info(self, code1, code2):
+        """ Get info of the """
+        source = self.point_location[code1]
+        dest = self.point_location[code2]
 
-#Presenter._init_window(screensize)
-Presenter._minimap_to_grid('j10')
-#Presenter._draw_object(0, 0, access)
-input()
+        vector = (source[0] - dest[0], source[1] - dest[1])
+        if vector not in [(0, 1), (1, 0), (-1, 0), (0, -1)]:
+            exit(1)
+        return source[0], source[1], vector
 
+    def _calculate_start(self, colm, row, vector):
+        start_x, start_y = self._minimap_to_grid(row, colm)
+        # xy
+        if vector == (0, -1):
+            # up
+            start_x += 2
+            start_y -= 1
+        elif vector == (0, 1):
+            # down
+            start_x += 10
+            start_y += 11
+        elif vector == (1, 0):
+            # left
+            start_x -= 1
+            start_y += 10
+        elif vector == (-1, 0):
+            # right
+            start_x += 11
+            start_y += 1
+        return (start_x, start_y)
