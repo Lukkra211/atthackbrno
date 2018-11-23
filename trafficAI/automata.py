@@ -59,7 +59,6 @@ class Link:
             else:
                 self.stucked += 1
 
-        print(self.queue)
 
     def reset(self):
         self.queue = [0] * LINK_LEN
@@ -93,7 +92,6 @@ class LinkPoint:
 
     def lock(self):
         try:
-            print(self.incomming[0].destination, self.outcomming)
             self.incomming[0].destination = self.outcomming[1]
             self.incomming[1].destination = self.outcomming[0]
         except IndexError as e:
@@ -139,7 +137,6 @@ class AccessPoint(Point):
         self.to_generate += 1
 
     def step(self):
-        print("a")
         self.inactive = True
         if self.to_generate == 0:
             return False
@@ -148,8 +145,6 @@ class AccessPoint(Point):
             return
 
         for _ in range(len(self.outcomming)):
-            print("lduhgliurhgpieruhg")
-            print(self.outcomming_cicle)
             possible_link = next(self.outcomming_cicle)
             if possible_link._redirect:
                 self.to_generate -= 1
@@ -200,7 +195,6 @@ class Core:
         self.points = {}
         self.links = []
 
-
         self.nn = False
         self.__process(minimap, connections)
 
@@ -225,6 +219,7 @@ class Core:
 
         for connection in connections:
             self.create_links(*connection)
+        self.finalize()
 
     def __exec_nn(self):
         pass
@@ -241,11 +236,8 @@ class Core:
             random.choice(self.access_points).generate()
 
     def create_links(self, code1, code2):
-
         point1 = self.points[code1]
         point2 = self.points[code2]
-        print("Point1", point1)
-        print("Point2", point2)
         link1 = Link(source=point1, destination=point2)
         link2 = Link(source=point2, destination=point1)
 
@@ -257,14 +249,15 @@ class Core:
 
         point1.register_links(incomming=link1, outcomming=link2)
         point2.register_links(incomming=link2, outcomming=link1)
-        point1.lock()
-        point2.lock()
+
     def finalize(self):
 
-        self.links = self.links.sort(key=lambda point: self.links.code)
-        self.points = self.points.sort(key=lambda point: self.points.code)
+        self.links.sort(key=lambda link: link.code)
+        self.access_points.sort(key=lambda point: point.code)
         for point in self.points.values():
             point.lock()
+
+
 
     def step(self):
 
@@ -279,8 +272,6 @@ test = Core(minimap, connections, vehicles)
 for i in range(100):
 
     test.spawn_vehicle()
-for i in range(100):
+for i in range(10):
     test.step()
     input()
-lukas = Lukas()
-lukas.repair_our_code()
