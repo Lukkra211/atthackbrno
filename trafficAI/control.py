@@ -49,7 +49,6 @@ class Controller:
     def __train(self):
         for individual in self.evolution.queue:
             self.evolution.rated(individual, self.__rate(individual))
-            print('hello')
 
         self.evolution.breed()
 
