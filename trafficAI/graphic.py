@@ -41,7 +41,7 @@ link = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ]]
 
 minimap = [['a01', 'l01', 'a02']]
-connections = ['a01-l01', 'l01-a02']
+connections = ['a01-l01', 'a02-l01']
 connectionsForCore = []
 for connection in connections:
     connectionsForCore.append(connection.split("-"))
@@ -221,26 +221,28 @@ class Presenter:
             y += 2
 
             start_x = x
-            start_y = y - 2
+            start_y = y +4
             vec = (-1, 0)
-            end_x = x - 28
-            end_y = start_y + 2
+            end_x = x - 29
+            end_y = start_y -2
+            print("left")
             destcode = self.minimap[row][colm-1]
         elif vector == (1, 0):
             # right
             x += 11
             y += 2
+            print("right")
 
             start_x = x
             start_y = y+2
-            end_x = x + 30
+            end_x = x + 29
             end_y = start_y + 2
             vec = (1, 0)
             destcode = self.minimap[row][colm+1]
         forward_str = code + "-" + destcode
         backward_str = destcode + "-" + code
-        self.link_vector[backward_str] = (start_x, start_y, vec)
-        self.link_vector[forward_str] = (end_x, end_y, (-vec[0], -vec[1]))
+        self.link_vector[forward_str] = (start_x, start_y, vec)
+        self.link_vector[backward_str] = (end_x, end_y, (-vec[0], -vec[1]))
         #print(self.link_vector)
         return (x, y)
 
