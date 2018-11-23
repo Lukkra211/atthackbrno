@@ -41,7 +41,7 @@ link = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
 minimap = [['a01', 'j01', 'a02'],
            ['a03', 'j05', 'a07'],
            ['a08', 'l10', 'a12']]
-connections = ['a03 - a01','a03 - a08','a08 - l10']
+connections = ['a03 - a01', 'a03 - a08', 'a08 - l10']
 
 check = 1
 for i in range(len(minimap)):
@@ -59,7 +59,6 @@ cell_colors = {cell_filled: black, cell_empty: white}
 length = 4
 size = (length, length)
 screensize = (((len(minimap)*41*4)-120), ((check*41*4)-120))
-print(screensize)
 # print(screensize[0],screensize[1])
 
 """import minimap from somewhere"""
@@ -77,6 +76,7 @@ class Presenter:
         self.core = core
         self.minimap = minimap
         self.point_location = {}
+        self.link_vector = {}
         self._process()
 
     @staticmethod
@@ -139,7 +139,6 @@ class Presenter:
         """ Draw connections between the points"""
         colm, row, vect = self._get_source_info(source, destination)
         shift_x, shift_y = self._calculate_start(colm, row, vect)
-        print(vect)
 
         forward = '{}-{}'.format(source, destination)
         backwards = '{}-{}'.format(destination, source)
@@ -170,32 +169,66 @@ class Presenter:
         dest = self.point_location[code2]
 
         dest, source = source, dest
-        print(dest, source)
-        vector = (source[0] - dest[0],dest[1] - source[1])
+        vector = (source[0] - dest[0], dest[1] - source[1])
         if vector not in [(0, 1), (1, 0), (-1, 0), (0, -1)]:
             exit(1)
         return dest[0], dest[1], vector
 
     def _calculate_start(self, colm, row, vector):
-        start_x, start_y = Presenter._minimap_to_grid(self.minimap[row][colm])
+        code = self.minimap[row][colm]
+        x, y = Presenter._minimap_to_grid(code)
         # xy
         if vector == (0, 1):
             # up
-            start_x += 2
-            start_y -= 1
+            x += 2
+            y -= 1
+
+            start_x = x + 2
+            start_y = y
+            vec = (0, 1)
+            end_x = start_x + 2
+            end_y = y - 30
+            destcode = self.minimap[row-1][colm]
+
         elif vector == (0, -1):
             # down
-            start_x += 8
-            start_y += 11
+            x += 8
+            y += 11
+
+            start_x = x - 2
+            start_y = y
+            vec = (0, -1)
+            end_x = start_x - 2
+            end_y = y + 30
+            destcode = self.minimap[row+1][colm]
         elif vector == (-1, 0):
             # left
-            start_x -= 1
-            start_y += 2
+            x -= 1
+            y += 2
+
+            start_x = x
+            start_y = y+2
+            vec = (-1, 0)
+            end_x = x - 30
+            end_y = start_y + 2
+            destcode = self.minimap[row][colm-1]
         elif vector == (1, 0):
             # right
-            start_x += 11
-            start_y += 2
-        return (start_x, start_y)
+            x += 11
+            y += 2
+
+            start_x = x
+            start_y = y+2
+            end_x = x + 30
+            end_y = start_y + 2
+            vec = (1, 0)
+            destcode = self.minimap[row][colm+1]
+        forward_str = code + " - " + destcode
+        backward_str = destcode + " - " + code
+        self.link_vector[forward_str] = (start_x, start_y, vec)
+        self.link_vector[backward_str] = (end_x, end_y, (-vec[0], -vec[1]))
+        print(self.link_vector)
+        return (x, y)
 
 
 Presenter(connections, minimap, None, screensize)
