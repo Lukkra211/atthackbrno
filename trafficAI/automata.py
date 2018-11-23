@@ -50,12 +50,16 @@ class Link:
                 self.queue[i] = 0
                 self.queue[i + 1] = 1
 
+
+
         if self.queue[-1] == FULL_CELL:
             if self.destination._redirect(self):
                 self.queue[-1] = 0
                 self.inactive = False
             else:
                 self.stucked += 1
+
+        print(self.queue)
 
     def reset(self):
         self.queue = [0] * LINK_LEN
@@ -122,21 +126,49 @@ class AccessPoint(Point):
     def __init__(self, code):
         super().__init__(code)
         self.callback = None
+        self.to_generate = 0
+        self.inactive = False
+        self.skip = False
 
     def _redirect(self, link):
         self.callback()
         return True
+
+    def generate(self):
+        self.to_generate += 1
+
+    def step(self):
+        print("a")
+        self.inactive = True
+        if self.to_generate == 0:
+            return False
+        if self.skip:
+            self.skip=False
+            return
+
+        for _ in range(len(self.outcomming)):
+            print("lduhgliurhgpieruhg")
+            print(self.outcomming_cicle)
+            possible_link = next(self.outcomming_cicle)
+            if possible_link._redirect:
+                self.to_generate -= 1
+                self.skip = True
+                return True
+            self.inactive = True
+
+
 
 
 class JunctionPoint(Point):
     def __init__(self, code):
         super().__init__(self, code)
 
+
     def _redirect(self, link) -> bool:
 
         if self.open[link.code]:
             for _ in range(len(self.links)):
-                possible_link = next(self.outcoming_cycle)
+                possible_link = next(self.outcoming_cicle)
                 if possible_link.code != link.reverse_code and possible_link._redirect():
                     return True
                 else:
@@ -146,34 +178,27 @@ class JunctionPoint(Point):
         else:
             return False
 
-    def register_links(self):
-        pass
-
-    def lock(self):
-        pass
-
-    def _redirect(self):
-        pass
-
 
 class Core:
     """
     Core object for controlling other objects.
     Works with AI and is controlled by Controller
     In init method implements minimap, connections and vehicles
-    TYPES = {a: AccessPoint,
-             j: JunctionPoint,
-             l: LinkPoint,
-        }"""
+    """
 
     def __init__(self, minimap: list, connections: list, vehicles: int):
 
+        self.TYPES = {"a": AccessPoint,
+                      "j": JunctionPoint,
+                      "l": LinkPoint,
+                      }
         self.vehicles = vehicles
         self.access_points = []
         self.junction_points = []
         self.junction_queues = []
         self.points = {}
         self.links = []
+
 
         self.nn = False
         self.__process(minimap, connections)
@@ -187,7 +212,7 @@ class Core:
             if not code:
                 continue
 
-            point = Point(code=code)
+            point = self.TYPES[code[0]](code=code)
             self.points[code] = point
 
             if code[0] == "a":
@@ -212,13 +237,14 @@ class Core:
 
     def spawn_vehicle(self):
         for _ in range(self.vehicles):
-            random.choice(self.access_points).spawn()
+            random.choice(self.access_points).generate()
 
     def create_links(self, code1, code2):
 
         point1 = self.points[code1]
         point2 = self.points[code2]
-
+        print("Point1", point1)
+        print("Point2", point2)
         link1 = Link(source=point1, destination=point2)
         link2 = Link(source=point2, destination=point1)
 
@@ -230,7 +256,8 @@ class Core:
 
         point1.register_links(incomming=link1, outcomming=link2)
         point2.register_links(incomming=link2, outcomming=link1)
-
+        point1.lock()
+        point2.lock()
     def finalize(self):
 
         self.links = self.links.sort(key=lambda point: self.links.code)
@@ -242,11 +269,17 @@ class Core:
 
         for link in self.links:
             link.step()
-
-        for point in self.points.values():
-            point.step()
+        for access_point in self.access_points:
+            access_point.step()
 
 
 # test part
 test = Core(minimap, connections, vehicles)
-test.step()
+for i in range(100):
+
+    test.spawn_vehicle()
+for i in range(100):
+    test.step()
+    input()
+lukas = Lukas()
+lukas.repair_our_code()
