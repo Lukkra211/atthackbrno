@@ -278,12 +278,13 @@ class Core:
         for link in self.links:
             print(link.code, link.queue)
 
-# test part
-test = Core(minimap, connections, vehicles)
-for i in range(5):
+def main():
+    # test part
+    test = Core(minimap, connections, vehicles)
+    for i in range(5):
 
-    test.spawn_vehicle()
-for i in range(90):
-    test.step()
-    input()
+        test.spawn_vehicle()
+    for i in range(90):
+        test.step()
+        input()
 
