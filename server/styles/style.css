@@ -1,0 +1,104 @@
+@font-face{font-family: Trebuchet MS; src: url('/fonts/TrebuchetMS.ttf');}
+html{
+    height: 100%;
+    background: url("/images/background.jpg");
+    background-color: rgba(255,165,0, 1);    /*rgba(128,255,0, 0.6);*/
+    background-position: center;
+    /*background-repeat: no-repeat;*/
+    background-size: cover;
+    background-height: auto;
+    color: white;
+}
+body{
+    background-color: transparent;
+    color: white;
+    font-family: Trebuchet MS;
+    /*min-width: 600px;*/
+}
+pre{
+    color: white;
+}
+.mui-panel{
+    background-color: rgba( 255, 255, 255, 0.85);
+}
+.footer{
+    min-width: 275px;
+    min-height: 65px;
+    width:100%;
+    /*background:#999;*/
+    background-color: rgba(255, 255, 255, 0.8); /* transparent;*/
+    position: fixed;
+    /*top: 20%;*/
+    bottom: 0%;
+    left:  0%;
+    -webkit-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16), 0 0px 2px 0 rgba(0, 0, 0, 0.12);
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16), 0 0px 2px 0 rgba(0, 0, 0, 0.12);
+}
+
+.footer .footer-content {
+    margin: auto;
+}
+
+/*  IN-GAME */
+.inGameBox{
+    /*width: 80%; */
+    /*height: 130px; */
+    background-color: rgba(255, 255, 255, 0.75);  /* rgba(38, 196, 133, 0.75), pink, transparent; */
+
+    position: absolute;
+    top: 5%;
+    /*bottom: 0;*/
+    left: 5%;
+    right: 5%;
+
+    margin: auto;
+}.startStopButtton{
+    font-size: 160%;
+    min-width: 200px;
+    min-height: 50px;
+    text-align: justify-all;
+}.inGameButton{
+    min-width: 280px;
+    min-height: 100px;
+    width: 100%;
+    height: 100%;
+    font-size: 200%;
+    text-align: justify-all;
+}.gamePin{
+    width: 240px; /*30%*/
+    height: 130px; /*12%*/
+    background-color: transparent; /* green */
+
+    position: absolute; /* absolute */
+    top:    30%;
+    /*bottom: -100px;*/
+    left:   30%;
+    right:  30%;
+    margin: auto;
+}
+/*  ADMIN SECTION   */
+.login{
+    width: 260px; /*30%*/
+    height: 130px; /*12%*/
+    background-color: transparent; /* green */
+
+    position: absolute;
+    top:    40%;
+    /*bottom: 0;*/
+    left:   10%;
+    right:  10%;
+
+    margin: auto;
+}.dashboardContent{
+    /*width: 80%; /*30%*/
+    /*height: 130px; /*12%*/
+    background-color: transparent; /* green */
+
+    position: absolute;
+    top:    20%;
+    /*bottom: 0;*/
+    left:   10%;
+    right:  10%;
+
+    margin: auto;
+}
