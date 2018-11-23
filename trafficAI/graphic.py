@@ -19,10 +19,15 @@ class Presenter:
     def _process(self):
         for indexRow in range(len(self.minimap)):
             for indexColm in range(len(self.minimap[indexRow])):
-                self._draw_object(indexRow, indexColm, OBJECTS[self.minimap[indexRow][indexColm][0]])
+                self._draw_object(indexRow, indexColm,
+                                  OBJECTS[self.minimap[indexRow][indexColm][0]])
                 self.point_location[self.minimap[indexRow]
                                     [indexColm]] = (indexRow, indexColm)
-        f
+
+        for row in self.connections:
+            for connection in row:
+                sorce, dest = connection.split(" - ")
+                self._process_connection(source=sorce, destination=dest)
 
     def main_loop(self):
         pass
