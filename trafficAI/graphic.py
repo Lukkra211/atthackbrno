@@ -1,18 +1,23 @@
 import pygame
+import sys
+import os
 
-length = int(os.environment.get('length'), 3)
+cell_colors = {}
+length = 3
 size = (length, length)
+"screensize"
+
 
 class Presenter:
     def __init__(self):
         pass
 
     @staticmethod
-    def _init_window():
+    def _init_window(screensize):
         pygame.init()
         pygame.display.set_caption("something")
 
-        screen = pygame.display.set_mode((200, 200))
+        screen = pygame.display.set_mode(screensize)
         screen.fill(255, 255, 255)
         pygame.display.flip()
 
@@ -28,8 +33,13 @@ class Presenter:
     def _minimap_to_grid(self):
         pass
 
-    def _draw_object(self):
-        pass
+    @staticmethod
+    def _draw_object(horizontal, vertical, array):
+        for row, hor_s in enumerate(array):
+            for ver_s, cell in enumerate(Iterable(row)):
+                hor = horizontal + hor_s
+                ver = vertical + ver_s
+                Presenter._draw_cell(hor, ver, cell_colors[cell])
 
     @staticmethod
     def _draw_cell(x, y, color):
