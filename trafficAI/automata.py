@@ -1,4 +1,4 @@
-import numpy
+import itertools
 
 LINK_LEN = 30
 EMPTY_CELL = 0
@@ -57,11 +57,45 @@ class Link:
 
 
 class LinkPoint:
-    pass
+    def __init__(self, code: str):
+        self.code = code
+        self.incomming = []
+        self.outcomming = []
+        self.register = 0
 
+    def register_links(self, incomming: Link, outcomming: Link):
+        self.incomming.append(incomming)
+        self.outcomming.append(outcomming)
+        self.register += 2
+
+    def lock(self):
+        try:
+            self.incomming[0].destination = self.outcomming[1]
+            self.incomming[1].destination = self.outcomming[0]
+        except IndexError as e:
+            raise RuntimeError(e, self)
+
+        if self.register != 4:
+            raise RuntimeError('LinkPoint got links instead of 4')
 
 class Point:
-        pass
+    def __init__(self, code):
+        self.code = code
+        self.incomming_cicle = None
+        self.outcomming_cicle = None
+        self.incomming = []
+        self.outcomming = []
+
+    def register_links(self, incomming: Link, outcomming: Link):
+        self.incomming.append(incomming)
+        self.outcomming.append(outcomming)
+
+    def lock(self):
+        self.incomming_cicle = itertools.cycle(self.incomming)
+        self.outcomming_cicle = itertools.cycle(self.outcomming)
+
+    def _redirect(self, link):
+        raise RuntimeError('not user in object')
 
 
 class AccessPoint:
