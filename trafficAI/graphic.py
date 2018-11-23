@@ -1,6 +1,8 @@
 import pygame
 import sys
 import os
+import time
+from automata import Core
 
 access = [[0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, ],
           [1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, ],
@@ -38,10 +40,11 @@ link = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ]]
 
-minimap = [['a01', 'j01', 'a02'],
-           ['a03', 'j05', 'a07'],
-           ['a08', 'l10', 'a12']]
-connections = ['a03 - a01', 'a03 - a08', 'a08 - l10']
+minimap = [['a01', 'l01', 'a02']]
+connections = ['a01-l01', 'l01-a02']
+connectionsForCore = []
+for connection in connections:
+    connectionsForCore.append(connection.split("-"))
 
 check = 1
 for i in range(len(minimap)):
@@ -58,7 +61,7 @@ cell_colors = {cell_filled: black, cell_empty: white}
 
 length = 4
 size = (length, length)
-screensize = (((len(minimap)*41*4)-120), ((check*41*4)-120))
+screensize = ((((check*41*4)-120), (len(minimap)*41*4)-120))
 # print(screensize[0],screensize[1])
 
 """import minimap from somewhere"""
@@ -100,17 +103,26 @@ class Presenter:
                                     [indexColm]] = (indexColm, indexRow)
 
         for connection in self.connections:
-            sorce, dest = connection.split(" - ")
+            sorce, dest = connection.split("-")
             #print("Conn" + str(sorce))
             self._process_connection(source=sorce, destination=dest)
 
-    def main_loop(self):
-        pass
+    def main_loop(self, core):
+        while True:
+            core.step()
+            self._redraw_links(core)
+            pygame.display.flip()
+            time.sleep(0.08)
 
-    def _redraw_links(self):
-        pass
+    def _redraw_links(self, core):
+        for link in core.links:
+            #print(link.code)
+            x, y, vec =self.link_vector[link.code]
+            print(link.code)
+            
+            for index, cell in enumerate(link.queue):
+                Presenter._draw_cell(x + (index * vec[0]),y + (index * vec[1]), COLORS[cell])
 
-    @staticmethod
     def _minimap_to_grid(pos_name):
         for k in range(len(minimap)):
             for l in range(len(minimap[k])):
@@ -180,26 +192,26 @@ class Presenter:
         code = self.minimap[row][colm]
         x, y = Presenter._minimap_to_grid(code)
         # xy
-        if vector == (0, 1):
+        if vector == (0, -1):
             # up
             x += 2
             y -= 1
 
             start_x = x + 2
             start_y = y
-            vec = (0, 1)
+            vec = (0, -1)
             end_x = start_x + 2
             end_y = y - 30
             destcode = self.minimap[row-1][colm]
 
-        elif vector == (0, -1):
+        elif vector == (0, 1):
             # down
             x += 8
             y += 11
 
             start_x = x - 2
             start_y = y
-            vec = (0, -1)
+            vec = (0, 1)
             end_x = start_x - 2
             end_y = y + 30
             destcode = self.minimap[row+1][colm]
@@ -209,9 +221,9 @@ class Presenter:
             y += 2
 
             start_x = x
-            start_y = y+2
+            start_y = y - 2
             vec = (-1, 0)
-            end_x = x - 30
+            end_x = x - 28
             end_y = start_y + 2
             destcode = self.minimap[row][colm-1]
         elif vector == (1, 0):
@@ -225,14 +237,23 @@ class Presenter:
             end_y = start_y + 2
             vec = (1, 0)
             destcode = self.minimap[row][colm+1]
-        forward_str = code + " - " + destcode
-        backward_str = destcode + " - " + code
-        self.link_vector[forward_str] = (start_x, start_y, vec)
-        self.link_vector[backward_str] = (end_x, end_y, (-vec[0], -vec[1]))
-        print(self.link_vector)
+        forward_str = code + "-" + destcode
+        backward_str = destcode + "-" + code
+        self.link_vector[backward_str] = (start_x, start_y, vec)
+        self.link_vector[forward_str] = (end_x, end_y, (-vec[0], -vec[1]))
+        #print(self.link_vector)
         return (x, y)
 
 
-Presenter(connections, minimap, None, screensize)
 
-input()
+def main():
+    core = Core(minimap, connectionsForCore, 30)
+    core.spawn_vehicle()
+    presenter = Presenter(connections, minimap, core, screensize)
+    presenter.main_loop(core)
+
+    input()
+
+
+if __name__ == "__main__":
+    main()

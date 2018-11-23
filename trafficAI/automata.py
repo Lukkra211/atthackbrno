@@ -65,7 +65,7 @@ class Link:
         self.stucked = 0
 
     def generate(self, empty_cells=1):
-        empty = self.si_empty(empty_cells)
+        empty = self.is_empty()
         if empty:
             self.queue[0] = 1
             self.inactive = False
@@ -75,9 +75,8 @@ class Link:
         return False
         #return self.generate()
 
-    def si_empty(self, span: int = 1):
+    def is_empty(self, span=1):
         return not any(self.queue[:span])
-
 
 class LinkPoint:
     def __init__(self, code: str):
@@ -217,6 +216,7 @@ class Core:
                 self.junction_points.append(point)
 
         for connection in connections:
+            #print(connection)
             self.create_links(*connection)
         self.finalize()
 
@@ -268,13 +268,19 @@ class Core:
             access_point.step()
 
         for link in self.links:
-            print(link.queue)
-# test part
-test = Core(minimap, connections, vehicles)
-for i in range(100):
+            # print(link.queue)
+            # ss
+            pass
+def main():
+    # test part
+    test = Core(minimap, connections, vehicles)
+    for i in range(100):
 
-    test.spawn_vehicle()
-for i in range(100):
-    test.step()
-    input()
+        test.spawn_vehicle()
+    for i in range(100):
+        test.step()
+        #input()
 
+
+if __name__ == "__main__":
+    main()
