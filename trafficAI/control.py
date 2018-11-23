@@ -8,6 +8,9 @@ class Controller:
         self.vehicles = None
         self.layers = None
 
+        self.presenter = None
+        self.core = None
+
     def load_system(self, system):
         """
         system: path to system (yaml)
@@ -21,9 +24,11 @@ class Controller:
         self.vehicles = system.get('vehicles', 40)
         self.layers = system.get('layers', [])
 
+        self.core = Core(self.minimap, self.connections, self.vehicles)
 
     def present(self):
-        pass
+        self.presenter = Presenter(self.connections, self.minimap, self.core)
+        self.presenter.main_loop()
 
     def validate(self):
         pass
