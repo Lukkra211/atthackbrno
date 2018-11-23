@@ -31,10 +31,11 @@ vehicles = 5
 
 
 class Link:
-    def __init__(self, destination: 'Point'):
-        self.code = '{}'.format(destination.code)
-        self.reverse_code = '{}'.format(destination.code)
+    def __init__(self, source: 'Point', destination: 'Point'):
+        self.code = '{}-{}'.format(source.code,destination.code)
+        self.reverse_code = '{}-{}'.format(destination.code, source.code)
         self.destination = destination
+        self.source = source
         self.queue = LINK_LEN * [0]
         self.stucked = 0
         self.inactive = False
@@ -247,8 +248,8 @@ class Core:
     def create_links(self, code1, code2):
         point1 = self.points[code1]
         point2 = self.points[code2]
-        link1 = Link(destination=point2)
-        link2 = Link(destination=point1)
+        link1 = Link(source=point1, destination=point2)
+        link2 = Link(source=point2, destination=point1)
 
         self.links.extend((link1, link2))
         if code1[0] == "j":
