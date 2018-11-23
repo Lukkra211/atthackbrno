@@ -1,8 +1,22 @@
+#IMPORTS
 import itertools
 
+#CONSTANTS
 LINK_LEN = 30
 EMPTY_CELL = 0
 FULL_CELL = 1
+
+#test part
+minimap = [
+        ['a01',  'l01',    'a02']
+]
+
+connections = [
+            ['a01', 'j01']
+            ['a02', 'j01']
+            ]
+
+vehicles = 20
 
 class Link:
     def __init__(self, source: 'Point', destination: 'Point'):
