@@ -36,6 +36,7 @@ class Core:
         self.junction_points = []
         self.junction_queues = []
         self.points = {}
+        self.links = []
 
         self.nn = False
         self.__process(minimap, connections)
@@ -55,6 +56,10 @@ class Core:
             if code[0] == "j":
                 self.junction_points.append(point)
 
+        for connection in connections:
+            self.create_links(*connection)
+
+
     def __exec_nn(self):
         pass
 
@@ -62,10 +67,25 @@ class Core:
         pass
 
     def spawn_vehicle(self):
-        pass
+        for _ in range(self.vehicles):
+            random.choice(self.access_points).spawn()
 
     def create_links(self, code1, code2):
-        pass
+
+        point1 = self.points[code1]
+        point2 = self.points[code2]
+        link1 = Link(source = point1, destination= point2)
+        link2 = Link(source=point2, destination= point1)
+
+        self.links.extend((link1, link2))
+        if code1[0] == "j":
+            self.junction_queues.append(point2)
+        if code2[0] == "j":
+            self.junction_queues.append(point1)
+
+        point1.register_links(incoming = link1, outcoming = link2)
+        point2.register_links(incoming = link2, outcoming = link1)
+
 
     def finalize(self):
         pass
