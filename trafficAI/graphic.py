@@ -104,7 +104,6 @@ class Presenter:
 
         for connection in self.connections:
             sorce, dest = connection.split("-")
-            #print("Conn" + str(sorce))
             self._process_connection(source=sorce, destination=dest)
 
     def main_loop(self, core):
@@ -117,18 +116,15 @@ class Presenter:
 
     def _redraw_links(self, core):
         for link in core.links:
-            #print(link.code)
-            x, y, vec =self.link_vector[link.code]
+            x, y, vec = self.link_vector[link.code]
 
-
-            
             for index, cell in enumerate(link.queue):
-                Presenter._draw_cell(x + (index * vec[0]),y + (index * vec[1]), COLORS[cell])
+                Presenter._draw_cell(
+                    x + (index * vec[0]), y + (index * vec[1]), COLORS[cell])
 
     def _minimap_to_grid(pos_name):
         for k in range(len(minimap)):
             for l in range(len(minimap[k])):
-                #print(minimap[i][j],"-",j * 41, i * 41)
                 if pos_name == minimap[k][l]:
                     cordx = l*41
                     cordy = k*41
@@ -149,7 +145,6 @@ class Presenter:
 
         rectangle = pygame.Rect((px, py), size)
         pygame.draw.rect(pygame.display.get_surface(), color, rectangle)
-        pygame.display.update()
 
     def _process_connection(self, source, destination):
         """ Draw connections between the points"""
@@ -177,7 +172,6 @@ class Presenter:
                     # right
                     Presenter._draw_cell(shift_x+index, shift_y +
                                          i, COLORS[LINK[i]])
-        pygame.display.flip()
 
     def _get_source_info(self, code1, code2):
         """ Get info of the """
@@ -223,18 +217,16 @@ class Presenter:
             y += 2
 
             start_x = x
-            start_y = y +4
+            start_y = y + 4
             vec = (-1, 0)
             end_x = x - 29
-            end_y = start_y -2
-
+            end_y = start_y - 2
 
             destcode = self.minimap[row][colm-1]
         elif vector == (1, 0):
             # right
             x += 11
             y += 2
-
 
             start_x = x
             start_y = y+2
@@ -246,9 +238,8 @@ class Presenter:
         backward_str = destcode + "-" + code
         self.link_vector[forward_str] = (start_x, start_y, vec)
         self.link_vector[backward_str] = (end_x, end_y, (-vec[0], -vec[1]))
-        #print(self.link_vector)
+        # print(self.link_vector)
         return (x, y)
-
 
 
 def main():
