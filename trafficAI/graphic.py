@@ -41,7 +41,7 @@ link = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
 minimap = [['a01', 'j01', 'a02'],
            ['a03', 'j05', 'a07'],
            ['a08', 'l10', 'a12']]
-connections = ['a01 - j01']
+connections = ['a03 - a01']
 
 check = 1
 for i in range(len(minimap)):
@@ -139,7 +139,7 @@ class Presenter:
         """ Draw connections between the points"""
         colm, row, vect = self._get_source_info(source, destination)
         shift_x, shift_y = self._calculate_start(colm, row, vect)
-        print(shift_x,shift_y)
+        print(vect)
 
         forward = '{}-{}'.format(source, destination)
         backwards = '{}-{}'.format(destination, source)
@@ -171,10 +171,10 @@ class Presenter:
 
         dest, source = source, dest
         print(dest, source)
-        vector = (source[0] - dest[0], source[1] - dest[1])
+        vector = (source[0] - dest[0],dest[1] - source[1])
         if vector not in [(0, 1), (1, 0), (-1, 0), (0, -1)]:
             exit(1)
-        return source[0], source[1], vector
+        return dest[0], dest[1], vector
 
     def _calculate_start(self, colm, row, vector):
         start_x, start_y = Presenter._minimap_to_grid(self.minimap[row][colm])
@@ -190,7 +190,7 @@ class Presenter:
         elif vector == (-1, 0):
             # left
             start_x -= 1
-            start_y += 10
+            start_y += 2
         elif vector == (1, 0):
             # right
             start_x += 11
