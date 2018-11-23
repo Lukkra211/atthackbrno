@@ -1,5 +1,10 @@
 import yaml
 
+from automata import Core
+from genetics import Evolution
+
+TEST_STEPS = 500
+
 
 class Controller:
     def __init__(self):
@@ -34,10 +39,30 @@ class Controller:
         pass
 
     def develop(self):
-        pass
+        evolution = Evolution(self.layers)
+
+        for _ in range(POPULATION):
+            self.__train()
 
     def __train(self):
-        pass
+        print('ahoj')
+        return
+        for individual in self.evolution.queue:
+            self.evolution.rated(individual, self.__rate(individual))
 
-    def __rate(self):
-        pass
+        self.evolution.breed()
+
+    def __rate(self, individual):
+        self.core.reset(self.evolution.get_nn(individual))
+
+        stucked = 0
+        for _ in range(TEST_STEPS):
+            self.core.step()
+
+            for link in self.core.links:
+                stucked += link.stucked
+
+            for ap in self.core.access_points:
+                if ap.inactive:
+                    stucked += ap.to_generate
+        return stucked
