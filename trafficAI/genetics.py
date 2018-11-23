@@ -19,6 +19,10 @@ class Evolution:
         self.layers = layers
         self.queue = self.__generate_queue()
 
+    def rated(self, individual, stucked):
+        self.individual['stucked'] = stucked
+        self.population.append(individual)
+
     def __generate_queue(self):
         return [{'number': i, 'stucked': 0, 'weights': self.__generate_dna}
                 for i in range(POPULATION)]

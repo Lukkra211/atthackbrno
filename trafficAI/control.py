@@ -4,6 +4,7 @@ from automata import Core
 from genetics import Evolution
 
 TEST_STEPS = 500
+GENERATIONS = 100
 
 
 class Controller:
@@ -13,6 +14,7 @@ class Controller:
         self.vehicles = None
         self.layers = None
 
+        self.evolution = None
         self.presenter = None
         self.core = None
 
@@ -39,16 +41,15 @@ class Controller:
         pass
 
     def develop(self):
-        evolution = Evolution(self.layers)
+        self.evolution = Evolution(self.layers)
 
-        for _ in range(POPULATION):
+        for _ in range(GENERATIONS):
             self.__train()
 
     def __train(self):
-        print('ahoj')
-        return
         for individual in self.evolution.queue:
             self.evolution.rated(individual, self.__rate(individual))
+            print('hello')
 
         self.evolution.breed()
 
