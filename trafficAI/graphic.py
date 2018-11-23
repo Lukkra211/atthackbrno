@@ -2,17 +2,29 @@ import pygame
 import sys
 import os
 
-arr =   [[0,0,1,1,1,1,1,1,1,0,0,],
-         [0,1,1,0,0,0,0,0,1,1,0,],
-         [1,1,0,0,0,0,0,0,0,1,1,],
-         [1,0,0,0,0,0,0,0,0,0,1,],
-         [1,0,0,0,1,1,1,0,0,0,1,],
-         [1,0,0,0,1,1,1,0,0,0,1,],
-         [1,0,0,0,1,1,1,0,0,0,1,],
-         [1,0,0,0,0,0,0,0,0,0,1,],
-         [1,1,0,0,0,0,0,0,0,1,1,],
-         [0,1,1,0,0,0,0,0,1,1,0,],
-         [0,0,1,1,1,1,1,1,1,0,0,]]
+access =   [[0,0,1,1,1,1,1,1,1,0,0,],
+            [0,1,1,0,0,0,0,0,1,1,0,],
+            [1,1,0,0,0,0,0,0,0,1,1,],
+            [1,0,0,0,0,1,0,0,0,0,1,],
+            [1,0,0,0,1,1,1,0,0,0,1,],
+            [1,0,0,1,1,1,1,1,0,0,1,],
+            [1,0,0,0,1,1,1,0,0,0,1,],
+            [1,0,0,0,0,1,0,0,0,0,1,],
+            [1,1,0,0,0,0,0,0,0,1,1,],
+            [0,1,1,0,0,0,0,0,1,1,0,],
+            [0,0,1,1,1,1,1,1,1,0,0,]]
+
+junction = [[1,1,1,1,1,1,1,1,1,1,1,],
+            [1,1,1,1,1,1,1,1,1,1,1,],
+            [1,1,0,0,0,0,0,0,0,1,1,],
+            [1,1,0,0,0,1,0,0,0,1,1,],
+            [1,1,0,0,1,1,1,0,0,1,1,],
+            [1,1,0,1,1,1,1,1,0,1,1,],
+            [1,1,0,0,1,1,1,0,0,1,1,],
+            [1,1,0,0,0,1,0,0,0,1,1,],
+            [1,1,0,0,0,0,0,0,0,1,1,],
+            [1,1,1,1,1,1,1,1,1,1,1,],
+            [1,1,1,1,1,1,1,1,1,1,1,]]
 
 minimap =  [['a01', 'j01', 'a02'],
             ['a03', 'j05', 'a07'],
@@ -24,6 +36,7 @@ for i in range(len(minimap)):
         if len(minimap[i]) > check:
             check = len(minimap[i])
 
+#print(minimap[0][2])
 cell_empty = 0
 cell_filled = 1
 black = (0,0,0)
@@ -32,8 +45,8 @@ cell_colors = {cell_filled: black,cell_empty: white}
 
 length = 4
 size = (length, length)
-screensize = (((len(minimap)*164)-120), ((check*164)-120))
-print(screensize[0],screensize[1])
+screensize = (((len(minimap)*41)-30), ((check*41)-30))
+
 
 """import minimap from somewhere"""
 
@@ -58,8 +71,12 @@ class Presenter:
     def _redraw_links(self):
         pass
 
-    def _minimap_to_grid(self):
-        pass
+    @staticmethod
+    def _minimap_to_grid(pos_name):
+        for i in range(len(minimap)):
+            for j in range(len(minimap[i])):
+                if pos_name == minimap[i][j]:
+                    print(j*41, i*41)
 
     @staticmethod
     def _draw_object(horizontal, vertical, array):
@@ -88,7 +105,8 @@ class Presenter:
         pass
 
 
-Presenter._init_window(screensize)
-Presenter._draw_cell(0, 0, black)
+#Presenter._init_window(screensize)
+Presenter._minimap_to_grid('j10')
+#Presenter._draw_object(0, 0, access)
 input()
 
