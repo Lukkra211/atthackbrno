@@ -1,4 +1,5 @@
 import random
+import sys
 
 import yaml
 
@@ -53,8 +54,12 @@ class Controller:
             self.__train()
 
     def __train(self):
-        for individual in self.evolution.queue:
+        for index, individual in enumerate(self.evolution.queue):
             self.evolution.rated(individual, self.__rate(individual))
+
+            if index % 5 == 0:
+                print('.', end='')
+                sys.stdout.flush()
 
         self.evolution.breed()
 

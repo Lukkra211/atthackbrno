@@ -1,10 +1,9 @@
 import numpy
-import itertools
 
 from typing import Callable
 
 
-POPULATION = 1000
+POPULATION = 100
 MUTATE_CHANCE = 0.9
 MERGE_RATIO = 0.95
 
@@ -83,6 +82,8 @@ class Evolution:
             selected = numpy.random.choice(self.population, 2, p=propability)
             self.copulate(selected[0], selected[1], index)
 
+        self.population = []
+
     def copulate(self, indv1, indv2, num):
         """
         Merge two individuals (their DNA) together and mutates them a bit
@@ -95,20 +96,20 @@ class Evolution:
         """
         weights1, weights2, = [], []
 
-        for l1, l2 in itertools.zip(indv1['weights1'], indv2['weights'])
+        for l1, l2 in zip(indv1['weights'], indv2['weights']):
             mask = numpy.random.random(l1.shape) >= MERGE_RATIO
 
-            indv1_new_layers = indv1_l.copy()
-            indv2_new_layers = indv2_l.copy()
+            new_l1 = l1.copy()
+            new_l2 = l2.copy()
 
-            indv1_new_layers[mask] = indv2_l[mask]
-            indv2_new_layers[mask] = indv1_l[mask]
+            new_l1[mask] = l2[mask]
+            new_l2[mask] = l1[mask]
 
-            self.mutate(indv1_new_layers)
-            self.mutate(indv2_new_layers)
+            self.mutate(new_l1)
+            self.mutate(new_l2)
 
-            weights1.append(indv1_new_layers)
-            weights2.append(indv2_new_layers)
+            weights1.append(new_l1)
+            weights2.append(new_l2)
 
         self.queue.extend([
             {'stucked': 0, 'weights': weights1, 'number': num},
