@@ -32,7 +32,7 @@ class Presenter:
     def _process_connection(self, source, destination):
 
         colm, row, vect = self._get_source_info(source, destination)
-        x, y, step = self._calculate_start(colm, row, vect)
+        x, y = self._calculate_start(colm, row, vect)
 
         forward = '{}-{}'.format(source, destination)
         backwards = '{}-{}'.format(destination, source)
@@ -41,8 +41,23 @@ class Presenter:
             shift_x = x
             shift_y = y
 
-            for colm in [1, 0, 3, 0, 2, 0, 1]:
-                self._draw_cell(shift_x+index, shift_y+index, COLORS[colm])
+            for i in range(len(LINK)):
+                if vect == (0, -1):
+                    # up
+                    self._draw_cell(shift_x+i, shift_y -
+                                    index, COLORS[LINK[colm]])
+                elif vect == (0, 1):
+                    # down
+                    self._draw_cell(shift_x-i, shift_y +
+                                    index, COLORS[LINK[colm]])
+                elif vect == (1, 0):
+                    # left
+                    self._draw_cell(shift_x-index, shift_y +
+                                    i, COLORS[LINK[colm]])
+                elif vect == (-1, 0):
+                    # right
+                    self._draw_cell(shift_x+index, shift_y +
+                                    i, COLORS[LINK[colm]])
 
     def _get_source_info(self, code1, code2):
         source = self.point_location[code1]
