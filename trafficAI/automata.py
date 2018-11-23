@@ -6,7 +6,7 @@ LINK_LEN = 30
 EMPTY_CELL = 0
 FULL_CELL = 1
 
-#test part
+#test map part
 minimap = [
         ['a01',  'l01',    'a02']
 ]
@@ -17,7 +17,7 @@ connections = [
             ]
 
 vehicles = 20
-
+#end map part
 class Link:
     def __init__(self, source: 'Point', destination: 'Point'):
         self.code = '{}-{}'.format(source.code, destination.code)
