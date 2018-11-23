@@ -1,9 +1,20 @@
+import pygame
+
+length = int(os.environment.get('length'), 3)
+size = (length, length)
+
 class Presenter:
     def __init__(self):
         pass
 
-    def _init_window(self):
-        pass
+    @staticmethod
+    def _init_window():
+        pygame.init()
+        pygame.display.set_caption("something")
+
+        screen = pygame.display.set_mode((200, 200))
+        screen.fill(255, 255, 255)
+        pygame.display.flip()
 
     def _process(self):
         pass
@@ -20,9 +31,14 @@ class Presenter:
     def _draw_object(self):
         pass
 
-    def _draw_cell(self)
-        pass
-    
+    @staticmethod
+    def _draw_cell(x, y, color):
+        px = x * length
+        py = y * length
+
+        rectangle = pygame.rect((px, py), size)
+        pygame.draw.rect(pygame.display.get_surface(), color, rectangle)
+
     def _process_connection(self):
         pass
 
@@ -31,3 +47,7 @@ class Presenter:
 
     def _calculate_start(self):
         pass
+
+
+
+
