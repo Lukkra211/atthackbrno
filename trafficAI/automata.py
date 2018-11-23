@@ -120,10 +120,31 @@ class AccessPoint(Point):
     def __init__(self, code):
         super().__init__(code)
         self.callback = None
+        self.to_generate = 0
+        self.inactive = False
+        self.skip = False
 
     def _redirect(self, link):
         self.callback()
         return True
+
+    def generate(self):
+        self.to_generate += 1
+
+    def step(self):
+        self.inactive = True
+        if self.to_generate == 0:
+            return False
+        if self.skip:
+            for _ in range(len(self.outcomming)):
+                possible_link = next(self.outcomming_cicle)
+                if possible_link._redirect:
+                    self.to_generate -= 1
+                    self.skip = True
+                    return True
+            self.inactive = True
+
+
 
 
 class JunctionPoint(Point):
@@ -143,16 +164,6 @@ class JunctionPoint(Point):
 
         else:
             return False
-
-
-    def register_links(self):
-        pass
-
-    def lock(self):
-        pass
-
-    def _redirect(self):
-        pass
 
 
 class Core:
