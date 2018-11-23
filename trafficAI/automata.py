@@ -9,25 +9,31 @@ FULL_CELL = 1
 
 # test map part
 minimap = [
-    ['a01', 'l01', 'a02']
+    ['a01', "l01", 'j01', 'l02', 'a02'],
+    [   '',    '', 'l03'],
+    [   '',    '', 'a03'],
+
 ]
 
 connections = [
-    ['a01', 'l01'],
-    ['a02', 'l01'],
+                ['a01', "l01"],
+                ["l01", 'j01'],
+                ['j01', 'l02'],
+                ['l02', 'a02'],
+                ['j01', 'l03'],
+                ['l03', 'a03'],
 ]
 
-vehicles = 20
+vehicles = 5
 
 
 # end map part
 
 
 class Link:
-    def __init__(self, source: 'Point', destination: 'Point'):
-        self.code = '{}-{}'.format(source.code, destination.code)
-        self.reverse_code = '{}-{}'.format(destination.code, source.code)
-        self.source = source
+    def __init__(self, destination: 'Point'):
+        self.code = '{}'.format(destination.code)
+        self.reverse_code = '{}'.format(destination.code)
         self.destination = destination
         self.queue = LINK_LEN * [0]
         self.stucked = 0
@@ -65,17 +71,18 @@ class Link:
         self.stucked = 0
 
     def generate(self, empty_cells=1):
-        empty = self.is_empty()
+        empty = self.is_empty(empty_cells)
         if empty:
             self.queue[0] = 1
             self.inactive = False
         return empty
 
     def _redirect(self, *_):
-        return False
-        #return self.generate()
+        #return False
+        return self.generate()
 
-    def is_empty(self, span=1):
+
+    def is_empty(self, span: int = 1):
         return not any(self.queue[:span])
 
 class LinkPoint:
@@ -86,6 +93,7 @@ class LinkPoint:
         self.register = 0
 
     def register_links(self, incomming: Link, outcomming: Link):
+        print(incomming,outcomming)
         self.incomming.append(incomming)
         self.outcomming.append(outcomming)
         self.register += 2
@@ -155,14 +163,15 @@ class AccessPoint(Point):
 
 class JunctionPoint(Point):
     def __init__(self, code):
-        super().__init__(self, code)
-
+        super().__init__(self)
+        self.code = code
 
     def _redirect(self, link) -> bool:
 
-        if self.open[link.code]:
-            for _ in range(len(self.links)):
-                possible_link = next(self.outcoming_cicle)
+       # if self.open[link.code]:
+        if True:                #self.links
+            for _ in range(len(self.outcomming)):
+                possible_link = next(self.outcomming_cicle)
                 if possible_link.code != link.reverse_code and possible_link._redirect():
                     return True
                 else:
@@ -238,8 +247,8 @@ class Core:
     def create_links(self, code1, code2):
         point1 = self.points[code1]
         point2 = self.points[code2]
-        link1 = Link(source=point1, destination=point2)
-        link2 = Link(source=point2, destination=point1)
+        link1 = Link(destination=point2)
+        link2 = Link(destination=point1)
 
         self.links.extend((link1, link2))
         if code1[0] == "j":
@@ -247,8 +256,8 @@ class Core:
         if code2[0] == "j":
             self.junction_queues.append(point1)
 
-        point1.register_links(incomming=link1, outcomming=link2)
-        point2.register_links(incomming=link2, outcomming=link1)
+        point1.register_links(incomming=link2, outcomming=link1)
+        point2.register_links(incomming=link1, outcomming=link2)
 
     def finalize(self):
 
@@ -268,19 +277,15 @@ class Core:
             access_point.step()
 
         for link in self.links:
-            # print(link.queue)
-            # ss
+            #print(link.code, link.queue)
             pass
+
 def main():
     # test part
     test = Core(minimap, connections, vehicles)
-    for i in range(100):
+    for i in range(5):
 
         test.spawn_vehicle()
-    for i in range(100):
+    for i in range(90):
         test.step()
-        #input()
-
-
-if __name__ == "__main__":
-    main()
+        input()
