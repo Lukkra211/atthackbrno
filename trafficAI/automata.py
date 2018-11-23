@@ -76,6 +76,8 @@ class Link:
         if empty:
             self.queue[0] = 1
             self.inactive = False
+
+
         return empty
 
     def _redirect(self, *_):
@@ -140,6 +142,7 @@ class AccessPoint(Point):
 
     def _redirect(self, link):
         self.callback()
+        print(".", end = "")
         return True
 
     def generate(self):
@@ -154,10 +157,10 @@ class AccessPoint(Point):
         for _ in range(len(self.outcomming)):
             possible_link = next(self.outcomming_cicle)
             if possible_link.generate():
+
                 self.to_generate -= 1
                 self.skip = True
-                return True
-            self.inactive = True
+        self.inactive = True
 
 
 
@@ -241,9 +244,8 @@ class Core:
             point.reset()
 
     def spawn_vehicle(self):
-        for _ in range(self.vehicles):
 
-            random.choice(self.access_points).generate()
+        random.choice(self.access_points).generate()
 
     def create_links(self, code1, code2):
         point1 = self.points[code1]
@@ -266,6 +268,8 @@ class Core:
         self.access_points.sort(key=lambda point: point.code)
         for point in self.points.values():
             point.lock()
+        for _ in range(self.vehicles):
+            self.spawn_vehicle()
 
 
 

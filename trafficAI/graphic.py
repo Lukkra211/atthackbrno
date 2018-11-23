@@ -110,6 +110,7 @@ class Presenter:
     def main_loop(self, core):
         while True:
             core.step()
+
             self._redraw_links(core)
             pygame.display.flip()
             time.sleep(0.2)
@@ -118,7 +119,8 @@ class Presenter:
         for link in core.links:
             #print(link.code)
             x, y, vec =self.link_vector[link.code]
-            print(link.code)
+
+
             
             for index, cell in enumerate(link.queue):
                 Presenter._draw_cell(x + (index * vec[0]),y + (index * vec[1]), COLORS[cell])
@@ -225,13 +227,14 @@ class Presenter:
             vec = (-1, 0)
             end_x = x - 29
             end_y = start_y -2
-            print("left")
+
+
             destcode = self.minimap[row][colm-1]
         elif vector == (1, 0):
             # right
             x += 11
             y += 2
-            print("right")
+
 
             start_x = x
             start_y = y+2
