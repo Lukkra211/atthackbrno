@@ -1,3 +1,5 @@
+import random
+
 import yaml
 
 from automata import Core
@@ -29,9 +31,13 @@ class Controller:
         self.connections = system['connections']
 
         self.vehicles = system.get('vehicles', 40)
-        self.layers = system.get('layers', [])
 
         self.core = Core(self.minimap, self.connections, self.vehicles)
+
+        hidden_layers = layers = system.get('layers', [])
+        side_neurons = len(self.core.junction_queues)
+        self.layers = [side_neurons] + hidden_layers + [side_neurons]
+        self.layers = [3, 3, 5]
 
     def present(self):
         self.presenter = Presenter(self.connections, self.minimap, self.core)

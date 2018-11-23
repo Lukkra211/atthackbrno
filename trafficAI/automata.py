@@ -152,6 +152,10 @@ class AccessPoint(Point):
                 return True
             self.inactive = True
 
+    def reset(self):
+        self.to_generate = 0
+        self.inactive = False
+        self.skip = False
 
 
 class JunctionPoint(Point):
@@ -222,11 +226,11 @@ class Core:
     def __exec_nn(self):
         pass
 
-    def reset(self):
-        self.nn = False
+    def reset(self, nn=None):
+        self.nn = nn
         for link in self.links:
             link.reset()
-        for point in self.points.values():
+        for point in self.access_points:
             point.reset()
 
     def spawn_vehicle(self):
@@ -262,14 +266,3 @@ class Core:
 
         for access_point in self.access_points:
             access_point.step()
-
-        for link in self.links:
-            print(link.queue)
-# test part
-test = Core(minimap, connections, vehicles)
-for i in range(100):
-
-    test.spawn_vehicle()
-for i in range(100):
-    test.step()
-    input()

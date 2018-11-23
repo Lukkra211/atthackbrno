@@ -1,4 +1,5 @@
 import numpy
+import itertools
 
 from typing import Callable
 
@@ -25,22 +26,26 @@ class Evolution:
 
         self.best_fit = None
 
-    def rated(self, individual, stucked):
-        self.individual['stucked'] = stucked
-        self.population.append(individual)
+    def __compute_layers(self):
+
+        pass
 
     def __generate_queue(self):
-        return [{'number': i, 'stucked': 0, 'weights': self.__generate_dna}
+        return [{'number': i, 'stucked': 0, 'weights': self.__generate_dna()}
                 for i in range(POPULATION)]
 
+    def rated(self, individual, stucked):
+        individual['stucked'] = stucked
+        self.population.append(individual)
+
     def __generate_dna(self):
-        weights = pygame.array(())
+        weights = []
 
         for index in range(len(self.layers) - 1):
-            size = (self.layers[index], self.layers[index + 1])
-            weights.append(numpy.random.random(size))
+            size = (self.layers[index + 1], self.layers[index])
+            weights.append(numpy.random.random(size) * 2 - 1)
 
-        return weights
+        return numpy.array(weights)
 
     def get_nn(self, weights, normalize=default_normalize) -> Callable:
         """
@@ -61,24 +66,20 @@ class Evolution:
         network. The scores then determine the propability that it will be
         merged with other NN.
         """
+        self.queue = []
         self.population.sort(key=lambda x: x['stucked'])
 
-        maximum = max(indv['stucked'] for indv in self.population)
+        maximum = self.population[-1]['stucked']
 
-        for index in range(len(self.population)):
-            stucked = self.population[index]['stucked']
-            self.population[index]['score'] = maximum - stucked
+        stucked_list = [float(indv['stucked']) for indv in self.population]
+        propability = numpy.array(stucked_list)
+        propability = numpy.power(maximum + 1 - propability, 20)
 
-        points = numpy.array([indv['score'] for indv in self.population])
-        total_points = sum(points)
-
+        total_points = sum(propability)
         propability_per_point = 1 / total_points
-        # the score is to ^20 to further the learning of the NN
-        # True, it makes the algorithm more likely to stuck in local
-        # minimum, but it's fine for the demo
-        propability = numpy.power(points, 20) * propability_per_point
+        propability = propability * propability_per_point
 
-        for index in range(self.population // 2):
+        for index in range(len(self.population) // 2):
             selected = numpy.random.choice(self.population, 2, p=propability)
             self.copulate(selected[0], selected[1], index)
 
@@ -94,34 +95,31 @@ class Evolution:
         """
         weights1, weights2, = [], []
 
-        for layer_index in len(indv1['weights']):
-            indv1_w, indv2_w = indv1['weights'], indv2['weights']
-            mask = numpy.random.random(indv1_w.shape) < MERGE_RATIO
+        for l1, l2 in itertools.zip(indv1['weights1'], indv2['weights'])
+            mask = numpy.random.random(l1.shape) >= MERGE_RATIO
 
-            indv1_new_layers = indv1_w.copy()
-            indv2_new_layers = indv2_w.copy()
+            indv1_new_layers = indv1_l.copy()
+            indv2_new_layers = indv2_l.copy()
 
-            indv1_new_layers[mask] = indv2_w[mask]
-            indv2_new_layers[mask] = indv1_w[mask]
+            indv1_new_layers[mask] = indv2_l[mask]
+            indv2_new_layers[mask] = indv1_l[mask]
+
+            self.mutate(indv1_new_layers)
+            self.mutate(indv2_new_layers)
 
             weights1.append(indv1_new_layers)
             weights2.append(indv2_new_layers)
 
-        self.queue.extend(
-            {'stucked': 0, 'weights': self.mutate(weights1), 'number': num},
-            {'stucked': 0, 'weights': self.mutate(weights2), 'number': num + 1}
-        )
+        self.queue.extend([
+            {'stucked': 0, 'weights': weights1, 'number': num},
+            {'stucked': 0, 'weights': weights2, 'number': num + 1}
+        ])
 
-    def mutate(self, individual) -> None:
+    def mutate(self, weights) -> None:
         """
         Change the weights of given individual
         """
-        new_weights = numpy.array(())
-        for layer in individual['weights']:
+        for layer in weights:
             mask = numpy.random.random(layer.shape) >= MUTATE_CHANCE
             randomly_created = numpy.random.random(layer.shape)
             layer[mask] = randomly_created[mask]
-
-            new_weights.append(layer)
-
-        individual['weights'] = new_weights
