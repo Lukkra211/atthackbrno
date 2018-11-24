@@ -26,54 +26,6 @@ junction = [[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, ],
             [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, ],
             [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, ]]
 
-juncgrrr = [[2, 2, 1, 1, 1, 1, 1, 1, 1, 3, 3, ],
-            [2, 2, 1, 1, 1, 1, 1, 1, 1, 3, 3, ],
-            [1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, ],
-            [1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, ],
-            [1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, ],
-            [1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 1, ],
-            [1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, ],
-            [1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, ],
-            [1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, ],
-            [3, 3, 1, 1, 1, 1, 1, 1, 1, 3, 3, ],
-            [3, 3, 1, 1, 1, 1, 1, 1, 1, 3, 3, ]]
-
-juncrgrr = [[3, 3, 1, 1, 1, 1, 1, 1, 1, 2, 2, ],
-            [3, 3, 1, 1, 1, 1, 1, 1, 1, 2, 2, ],
-            [1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, ],
-            [1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, ],
-            [1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, ],
-            [1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 1, ],
-            [1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, ],
-            [1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, ],
-            [1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, ],
-            [3, 3, 1, 1, 1, 1, 1, 1, 1, 3, 3, ],
-            [3, 3, 1, 1, 1, 1, 1, 1, 1, 3, 3, ]]
-
-juncrrgr = [[3, 3, 1, 1, 1, 1, 1, 1, 1, 3, 3, ],
-            [3, 3, 1, 1, 1, 1, 1, 1, 1, 3, 3, ],
-            [1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, ],
-            [1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, ],
-            [1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, ],
-            [1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 1, ],
-            [1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, ],
-            [1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, ],
-            [1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, ],
-            [2, 2, 1, 1, 1, 1, 1, 1, 1, 3, 3, ],
-            [2, 2, 1, 1, 1, 1, 1, 1, 1, 3, 3, ]]
-
-juncrrrg = [[3, 3, 1, 1, 1, 1, 1, 1, 1, 3, 3, ],
-            [3, 3, 1, 1, 1, 1, 1, 1, 1, 3, 3, ],
-            [1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, ],
-            [1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, ],
-            [1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, ],
-            [1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 1, ],
-            [1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, ],
-            [1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, ],
-            [1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, ],
-            [3, 3, 1, 1, 1, 1, 1, 1, 1, 2, 2, ],
-            [3, 3, 1, 1, 1, 1, 1, 1, 1, 2, 2, ]]
-
 link = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
         [0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, ],
@@ -95,13 +47,15 @@ cell_empty = 0
 cell_filled = 1
 cell_green = 2
 cell_red = 3
-cell_colors = {cell_filled: black, cell_empty: white, cell_green: green, cell_red: red}
+cell_colors = {cell_filled: black, cell_empty: white,
+               cell_green: green, cell_red: red}
 
 length = 4
 size = (length, length)
 
 COLORS = [white, black, white, white]
 LINK = [1, 0, 3, 0, 2, 0, 1]
+link_length = 30
 OBJECTS = {"j": junction, "l": link, "a": access}
 
 
@@ -132,18 +86,7 @@ class Presenter:
                     continue
                 x, y = self._minimap_to_grid(self.minimap[indexRow][indexColm])
                 obj = OBJECTS[self.minimap[indexRow][indexColm][0]]
-                if(obj == junction):
-                    side = "left"
-                    if(side == "up"):
-                        Presenter._draw_object(x, y, juncrgrr)
-                    elif(side == "down"):
-                        Presenter._draw_object(x, y, juncrrgr)
-                    elif(side == "left"):
-                        Presenter._draw_object(x, y, juncgrrr)
-                    elif(side == "righ"):
-                        Presenter._draw_object(x, y, juncrrrg)
-                else:
-                    Presenter._draw_object(x, y, obj)
+                Presenter._draw_object(x, y, obj)
                 self.point_location[self.minimap[indexRow]
                                     [indexColm]] = (indexColm, indexRow)
 
@@ -155,12 +98,30 @@ class Presenter:
         while True:
             core.step()
             self._redraw_links(core)
+            self.update_junction(core)
             pygame.display.flip()
             time.sleep(0.02)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     exit(0)
+
+    def update_junction(self, core):
+        for jp in core.junction_points:
+            for code, open in jp.open.items():
+                x, y, vector = self.link_vector[code]
+                if(code[0] == 'j'):
+                    new_x, new_y = x - vector[0], y - vector[1]
+                else:
+                    new_x, new_y = x + vector[0] * link_length, y + vector[1] * 30
+                if not open:
+                    self._draw_cell(new_x, new_y, red)
+                    #self._draw_cell(new_x+vector[0], new_y+vector[1], red)
+                    #self._draw_cell(new_x-vector[0], new_y-vector[1], red)
+                else:
+                    self._draw_cell(new_x, new_y, green)
+                    #self._draw_cell(new_x+vector[0], new_y+vector[1], green)
+                    #self._draw_cell(new_x-vector[0], new_y-vector[1], green)
 
     def _redraw_links(self, core):
         """Redraw links will draw the cars"""
@@ -208,7 +169,7 @@ class Presenter:
         colm, row, vect = self._get_source_info(source, destination)
         shift_x, shift_y = self._calculate_start(colm, row, vect)
 
-        for index in range(30):
+        for index in range(link_length):
             for i in range(len(LINK)):
                 if vect == (0, 1):
                     # up
