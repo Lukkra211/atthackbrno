@@ -40,6 +40,8 @@ link = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
 
 black = (0, 0, 0)
 white = (255, 255, 255)
+green = (0, 255, 0)
+red = (255, 0, 0)
 
 cell_empty = 0
 cell_filled = 1
@@ -94,6 +96,7 @@ class Presenter:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
+                    exit(0)
 
     def _redraw_links(self, core):
         for link in core.links:
@@ -101,8 +104,8 @@ class Presenter:
 
             for index, cell in enumerate(link.queue):
                 if cell == link.queue[index-1] and cell == 1:
-                        Presenter._draw_cell(
-                        x + (index * vec[0]), y + (index * vec[1]), (255,0,0))
+                    Presenter._draw_cell(
+                        x + (index * vec[0]), y + (index * vec[1]), red)
 
                 else:
                     Presenter._draw_cell(
@@ -136,9 +139,6 @@ class Presenter:
         """ Draw connections between the points"""
         colm, row, vect = self._get_source_info(source, destination)
         shift_x, shift_y = self._calculate_start(colm, row, vect)
-
-        forward = '{}-{}'.format(source, destination)
-        backwards = '{}-{}'.format(destination, source)
 
         for index in range(30):
             for i in range(len(LINK)):
