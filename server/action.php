@@ -50,6 +50,10 @@
                       </div>
                     </td>
                   </tr>
+                  <tr style='width: 100%; '>
+                    <td><h4>Population: </h4></td>
+                    <td>200</td>
+                  </tr>
                 </table>
 
 <?php /*
