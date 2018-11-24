@@ -138,7 +138,6 @@ class AccessPoint(Point):
 
     def _redirect(self, link):
         self.callback()
-        print(".", end="")
         return True
 
     def generate(self):

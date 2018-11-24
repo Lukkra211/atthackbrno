@@ -38,8 +38,9 @@ link = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ]]
 
-minimap = [['a01'], ['l01'], ['a02']]
-connections = ['a01-l01', 'a02-l01']
+minimap = [['a01', 'l04', 'a02'],
+           ['a03', '', 'a04']]
+connections = ['a03-a01', 'a01-l04', 'l04-a02', 'a02-a04']
 connectionsForCore = []
 
 for connection in connections:
@@ -180,6 +181,7 @@ class Presenter:
         dest, source = source, dest
         vector = (source[0] - dest[0], dest[1] - source[1])
         if vector not in [(0, 1), (1, 0), (-1, 0), (0, -1)]:
+            print("Can't connect")
             exit(1)
         return dest[0], dest[1], vector
 
@@ -210,7 +212,7 @@ class Presenter:
             end_x = start_x - 2
             end_y = y + 30
             destcode = self.minimap[row+1][colm]
-            
+
         elif vector == (-1, 0):
             # left
             x -= 1
@@ -240,7 +242,6 @@ class Presenter:
 
         self.link_vector[forward_str] = (start_x, start_y, vec)
         self.link_vector[backward_str] = (end_x, end_y, (-vec[0], -vec[1]))
-        # print(self.link_vector)
         return (x, y)
 
 
