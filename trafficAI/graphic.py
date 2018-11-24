@@ -26,6 +26,54 @@ junction = [[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, ],
             [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, ],
             [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, ]]
 
+juncgrrr = [[2, 2, 1, 1, 1, 1, 1, 1, 1, 3, 3, ],
+            [2, 2, 1, 1, 1, 1, 1, 1, 1, 3, 3, ],
+            [1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, ],
+            [1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, ],
+            [1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, ],
+            [1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 1, ],
+            [1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, ],
+            [1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, ],
+            [1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, ],
+            [3, 3, 1, 1, 1, 1, 1, 1, 1, 3, 3, ],
+            [3, 3, 1, 1, 1, 1, 1, 1, 1, 3, 3, ]]
+
+juncrgrr = [[3, 3, 1, 1, 1, 1, 1, 1, 1, 2, 2, ],
+            [3, 3, 1, 1, 1, 1, 1, 1, 1, 2, 2, ],
+            [1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, ],
+            [1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, ],
+            [1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, ],
+            [1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 1, ],
+            [1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, ],
+            [1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, ],
+            [1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, ],
+            [3, 3, 1, 1, 1, 1, 1, 1, 1, 3, 3, ],
+            [3, 3, 1, 1, 1, 1, 1, 1, 1, 3, 3, ]]
+
+juncrrgr = [[3, 3, 1, 1, 1, 1, 1, 1, 1, 3, 3, ],
+            [3, 3, 1, 1, 1, 1, 1, 1, 1, 3, 3, ],
+            [1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, ],
+            [1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, ],
+            [1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, ],
+            [1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 1, ],
+            [1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, ],
+            [1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, ],
+            [1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, ],
+            [2, 2, 1, 1, 1, 1, 1, 1, 1, 3, 3, ],
+            [2, 2, 1, 1, 1, 1, 1, 1, 1, 3, 3, ]]
+
+juncrrrg = [[3, 3, 1, 1, 1, 1, 1, 1, 1, 3, 3, ],
+            [3, 3, 1, 1, 1, 1, 1, 1, 1, 3, 3, ],
+            [1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, ],
+            [1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, ],
+            [1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, ],
+            [1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 1, ],
+            [1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, ],
+            [1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, ],
+            [1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, ],
+            [3, 3, 1, 1, 1, 1, 1, 1, 1, 2, 2, ],
+            [3, 3, 1, 1, 1, 1, 1, 1, 1, 2, 2, ]]
+
 link = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
         [0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, ],
@@ -45,7 +93,9 @@ red = (255, 0, 0)
 
 cell_empty = 0
 cell_filled = 1
-cell_colors = {cell_filled: black, cell_empty: white}
+cell_green = 2
+cell_red = 3
+cell_colors = {cell_filled: black, cell_empty: white, cell_green: green, cell_red: red}
 
 length = 4
 size = (length, length)
@@ -81,8 +131,19 @@ class Presenter:
                 if not self.minimap[indexRow][indexColm]:
                     continue
                 x, y = self._minimap_to_grid(self.minimap[indexRow][indexColm])
-                Presenter._draw_object(x, y,
-                                       OBJECTS[self.minimap[indexRow][indexColm][0]])
+                obj = OBJECTS[self.minimap[indexRow][indexColm][0]]
+                if(obj == junction):
+                    side = "left"
+                    if(side == "up"):
+                        Presenter._draw_object(x, y, juncrgrr)
+                    elif(side == "down"):
+                        Presenter._draw_object(x, y, juncrrgr)
+                    elif(side == "left"):
+                        Presenter._draw_object(x, y, juncgrrr)
+                    elif(side == "righ"):
+                        Presenter._draw_object(x, y, juncrrrg)
+                else:
+                    Presenter._draw_object(x, y, obj)
                 self.point_location[self.minimap[indexRow]
                                     [indexColm]] = (indexColm, indexRow)
 
