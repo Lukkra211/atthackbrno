@@ -9,7 +9,6 @@ from genetics import Evolution
 from graphic import Presenter
 
 TEST_STEPS = 500
-GENERATIONS = 100
 
 
 class Controller:
@@ -66,7 +65,7 @@ class Controller:
         Called when the user wants to train the AI for a given system from YAML
         """
         try:
-            for _ in range(GENERATIONS):
+            while True:
                 self.__train()
                 print('')
 
