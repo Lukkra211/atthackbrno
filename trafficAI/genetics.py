@@ -144,5 +144,5 @@ class Evolution:
         """
         for layer in weights:
             mask = numpy.random.random(layer.shape) >= MUTATE_CHANCE
-            randomly_created = numpy.random.random(layer.shape)
-            layer[mask] = randomly_created[mask]
+            randomly_created = numpy.random.random(layer.shape) - 1
+            layer[mask] += randomly_created[mask]

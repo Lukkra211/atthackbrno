@@ -47,7 +47,7 @@ class Controller:
         """
         Called when the user wants to run the simulation with GUI
         """
-        self.presenter = Presenter(self.connections, self.minimap, (700, 700))
+        self.presenter = Presenter(self.connections, self.minimap, (900, 900))
         self.presenter.main_loop(self.core)
 
     def validate(self):
