@@ -1,3 +1,4 @@
+# IMPORTS
 from numpy import random
 import itertools
 from itertools import chain
@@ -8,6 +9,7 @@ EMPTY_CELL = 0
 FULL_CELL = 1
 
 # test map part
+"""
 minimap = [
     ['a01', "l01", 'j01', 'l02', 'a02'],
     [   '',    '', 'l03'],
@@ -25,14 +27,14 @@ connections = [
 ]
 
 vehicles = 5
+"""
 
 
 # end map part
 
-
 class Link:
     def __init__(self, source: 'Point', destination: 'Point'):
-        self.code = '{}-{}'.format(source.code,destination.code)
+        self.code = '{}-{}'.format(source.code, destination.code)
         self.reverse_code = '{}-{}'.format(destination.code, source.code)
         self.destination = destination
         self.source = source
@@ -57,15 +59,12 @@ class Link:
                 self.queue[i] = 0
                 self.queue[i + 1] = 1
 
-
-
         if self.queue[-1] == FULL_CELL:
             if self.destination._redirect(self):
                 self.queue[-1] = 0
                 self.inactive = False
             else:
                 self.stucked += 1
-
 
     def reset(self):
         self.queue = [0] * LINK_LEN
@@ -76,17 +75,14 @@ class Link:
         if empty:
             self.queue[0] = 1
             self.inactive = False
-
-
         return empty
 
     def _redirect(self, *_):
-        #return False
         return self.generate()
-
 
     def is_empty(self, span: int = 1):
         return not any(self.queue[:span])
+
 
 class LinkPoint:
     def __init__(self, code: str):
@@ -96,7 +92,6 @@ class LinkPoint:
         self.register = 0
 
     def register_links(self, incomming: Link, outcomming: Link):
-        #print(incomming,outcomming)
         self.incomming.append(incomming)
         self.outcomming.append(outcomming)
         self.register += 2
@@ -142,7 +137,7 @@ class AccessPoint(Point):
 
     def _redirect(self, link):
         self.callback()
-        print(".", end = "")
+        print(".", end="")
         return True
 
     def generate(self):
@@ -157,12 +152,9 @@ class AccessPoint(Point):
         for _ in range(len(self.outcomming)):
             possible_link = next(self.outcomming_cicle)
             if possible_link.generate():
-
                 self.to_generate -= 1
                 self.skip = True
         self.inactive = True
-
-
 
 
 class JunctionPoint(Point):
@@ -172,16 +164,14 @@ class JunctionPoint(Point):
 
     def _redirect(self, link) -> bool:
 
-       # if self.open[link.code]:
-        if True:                #self.links
+        # if self.open[link.code]:
+        if True:  # self.links
             for _ in range(len(self.outcomming)):
                 possible_link = next(self.outcomming_cicle)
                 if possible_link.code != link.reverse_code and possible_link._redirect():
                     return True
                 else:
                     continue
-
-
         else:
             return False
 
@@ -210,10 +200,7 @@ class Core:
         self.__process(minimap, connections)
 
     def __process(self, minimap, connections):
-        """
 
-
-        """
         for code in chain.from_iterable(minimap):
             if not code:
                 continue
@@ -229,7 +216,6 @@ class Core:
                 self.junction_points.append(point)
 
         for connection in connections:
-            #print(connection)
             self.create_links(*connection)
         self.finalize()
 
@@ -244,7 +230,6 @@ class Core:
             point.reset()
 
     def spawn_vehicle(self):
-
         random.choice(self.access_points).generate()
 
     def create_links(self, code1, code2):
@@ -271,8 +256,6 @@ class Core:
         for _ in range(self.vehicles):
             self.spawn_vehicle()
 
-
-
     def step(self):
 
         for link in self.links:
@@ -281,12 +264,17 @@ class Core:
         for access_point in self.access_points:
             access_point.step()
 
+        # test part
+        """
         for link in self.links:
-            #print(link.code, link.queue)
-            pass
+            print(link.code, link.queue)
+        """
+        # end test part
+
 
 def main():
     # test part
+    """
     test = Core(minimap, connections, vehicles)
     for i in range(5):
 
@@ -294,5 +282,9 @@ def main():
     for i in range(90):
         test.step()
         input()
+    """
+    # end test part
+
+
 if __name__ == "__main__":
     main()
