@@ -40,22 +40,28 @@ link = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
 
 black = (0, 0, 0)
 white = (255, 255, 255)
+green = (0, 255, 0)
+red = (255, 0, 0)
 
 cell_empty = 0
 cell_filled = 1
-cell_colors = {cell_filled: black, cell_empty: white}
+cell_green = 2
+cell_red = 3
+cell_colors = {cell_filled: black, cell_empty: white,
+               cell_green: green, cell_red: red}
 
 length = 4
 size = (length, length)
 
 COLORS = [white, black, white, white]
 LINK = [1, 0, 3, 0, 2, 0, 1]
+link_length = 30
 OBJECTS = {"j": junction, "l": link, "a": access}
 
 
 class Presenter:
     def __init__(self, connections, minimap, screensize):
-        """This class will visualize the map and cars"""
+        """This class will innit the functionality"""
         self._init_window(screensize)
         self.connections = connections
         self.minimap = minimap
@@ -65,6 +71,7 @@ class Presenter:
 
     @staticmethod
     def _init_window(screensize):
+        """ This class will innit pygame a set background to white"""
         pygame.init()
         pygame.display.set_caption("Traffic Controlled By Neural Network")
 
@@ -72,13 +79,14 @@ class Presenter:
         screen.fill((255, 255, 255))
 
     def _process(self):
+        """Take minimap and connections and send then to draw"""
         for indexRow in range(len(self.minimap)):
             for indexColm in range(len(self.minimap[indexRow])):
                 if not self.minimap[indexRow][indexColm]:
                     continue
                 x, y = self._minimap_to_grid(self.minimap[indexRow][indexColm])
-                Presenter._draw_object(x, y,
-                                       OBJECTS[self.minimap[indexRow][indexColm][0]])
+                obj = OBJECTS[self.minimap[indexRow][indexColm][0]]
+                Presenter._draw_object(x, y, obj)
                 self.point_location[self.minimap[indexRow]
                                     [indexColm]] = (indexColm, indexRow)
 
@@ -86,26 +94,51 @@ class Presenter:
             self._process_connection(source=source, destination=dest)
 
     def main_loop(self, core):
+        """Main loopupdates of display"""
         while True:
             core.step()
             self._redraw_links(core)
+            self.update_junction(core)
             pygame.display.flip()
             time.sleep(0.02)
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    exit(0)
+
+    def update_junction(self, core):
+        for jp in core.junction_points:
+            for code, open in jp.open.items():
+                x, y, vector = self.link_vector[code]
+                if(code[0] == 'j'):
+                    new_x, new_y = x - vector[0], y - vector[1]
+                else:
+                    new_x, new_y = x + vector[0] * link_length, y + vector[1] * 30
+                if not open:
+                    self._draw_cell(new_x, new_y, red)
+                    self._draw_cell(new_x+vector[1]*1, new_y+vector[0]*1, red)
+                    self._draw_cell(new_x-vector[1]*1, new_y-vector[0]*1, red)
+                else:
+                    self._draw_cell(new_x, new_y, green)
+                    self._draw_cell(new_x+vector[1]*1, new_y+vector[0]*1, green)
+                    self._draw_cell(new_x-vector[1]*1, new_y-vector[0]*1, green)
 
     def _redraw_links(self, core):
+        """Redraw links will draw the cars"""
         for link in core.links:
             x, y, vec = self.link_vector[link.code]
 
             for index, cell in enumerate(link.queue):
                 if cell == link.queue[index-1] and cell == 1:
-                        Presenter._draw_cell(
-                        x + (index * vec[0]), y + (index * vec[1]), (255,0,0))
+                    Presenter._draw_cell(
+                        x + (index * vec[0]), y + (index * vec[1]), red)
 
                 else:
                     Presenter._draw_cell(
                         x + (index * vec[0]), y + (index * vec[1]), COLORS[cell])
 
     def _minimap_to_grid(self, pos_name):
+        """ geting grid coordinates from name of the object"""
         for k in range(len(self.minimap)):
             for l in range(len(self.minimap[k])):
                 if pos_name == self.minimap[k][l]:
@@ -115,6 +148,7 @@ class Presenter:
 
     @staticmethod
     def _draw_object(horizontal, vertical, array):
+        """This will draw an object"""
         for hor_s, row in enumerate(array):
             for ver_s, cell in enumerate(row):
                 hor = horizontal + hor_s
@@ -123,6 +157,7 @@ class Presenter:
 
     @staticmethod
     def _draw_cell(x, y, color):
+        """This will draw a single cell to the screen"""
         px = x * length
         py = y * length
 
@@ -134,10 +169,7 @@ class Presenter:
         colm, row, vect = self._get_source_info(source, destination)
         shift_x, shift_y = self._calculate_start(colm, row, vect)
 
-        forward = '{}-{}'.format(source, destination)
-        backwards = '{}-{}'.format(destination, source)
-
-        for index in range(30):
+        for index in range(link_length):
             for i in range(len(LINK)):
                 if vect == (0, 1):
                     # up
@@ -157,7 +189,7 @@ class Presenter:
                                          i, COLORS[LINK[i]])
 
     def _get_source_info(self, code1, code2):
-        """ Get info of the """
+        """ Get info of the objects"""
         source = self.point_location[code1]
         dest = self.point_location[code2]
 
@@ -168,6 +200,7 @@ class Presenter:
         return dest[0], dest[1], vector
 
     def _calculate_start(self, colm, row, vector):
+        """This will claculate start point of the links"""
         code = self.minimap[row][colm]
         x, y = self._minimap_to_grid(code)
         # xy
