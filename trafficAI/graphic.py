@@ -1,6 +1,4 @@
 import pygame
-import sys
-import os
 import time
 from automata import Core
 
@@ -43,28 +41,29 @@ link = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
 minimap = [['a01'], ['l01'], ['a02']]
 connections = ['a01-l01', 'a02-l01']
 connectionsForCore = []
+
 for connection in connections:
     connectionsForCore.append(connection.split("-"))
 
 check = 1
+
 for i in range(len(minimap)):
     for j in range(len(minimap[i])):
         if len(minimap[i]) > check:
             check = len(minimap[i])
 
-# print(minimap[0][2])
-cell_empty = 0
-cell_filled = 1
+
 black = (0, 0, 0)
 white = (255, 255, 255)
+
+cell_empty = 0
+cell_filled = 1
 cell_colors = {cell_filled: black, cell_empty: white}
 
 length = 4
 size = (length, length)
-screensize = ((((check*41*4)-120), (len(minimap)*41*4)-120))
-# print(screensize[0],screensize[1])
 
-"""import minimap from somewhere"""
+screensize = ((check*164)-120, (len(minimap)*164)-120)
 
 COLORS = [white, black, white, white]
 LINK = [1, 0, 3, 0, 2, 0, 1]
@@ -211,6 +210,7 @@ class Presenter:
             end_x = start_x - 2
             end_y = y + 30
             destcode = self.minimap[row+1][colm]
+            
         elif vector == (-1, 0):
             # left
             x -= 1
@@ -221,8 +221,8 @@ class Presenter:
             vec = (-1, 0)
             end_x = x - 29
             end_y = start_y - 2
-
             destcode = self.minimap[row][colm-1]
+
         elif vector == (1, 0):
             # right
             x += 11
@@ -234,8 +234,10 @@ class Presenter:
             end_y = start_y + 2
             vec = (1, 0)
             destcode = self.minimap[row][colm+1]
+
         forward_str = code + "-" + destcode
         backward_str = destcode + "-" + code
+
         self.link_vector[forward_str] = (start_x, start_y, vec)
         self.link_vector[backward_str] = (end_x, end_y, (-vec[0], -vec[1]))
         # print(self.link_vector)
