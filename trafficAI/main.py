@@ -8,6 +8,9 @@ from control import Controller
 @click.option('--system', type=click.Path(exists=True))
 @click.option('--mode', type=click.Choice(['run', 'train']))
 def main(system, mode):
+    """
+    TrafficAI command line tool
+    """
     controller = Controller()
     controller.load_system(system)
 

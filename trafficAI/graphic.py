@@ -38,21 +38,6 @@ link = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ]]
 
-minimap = [['a01'], ['l01'], ['a02']]
-connections = ['a01-l01', 'a02-l01']
-connectionsForCore = []
-
-for connection in connections:
-    connectionsForCore.append(connection.split("-"))
-
-check = 1
-
-for i in range(len(minimap)):
-    for j in range(len(minimap[i])):
-        if len(minimap[i]) > check:
-            check = len(minimap[i])
-
-
 black = (0, 0, 0)
 white = (255, 255, 255)
 
@@ -63,19 +48,16 @@ cell_colors = {cell_filled: black, cell_empty: white}
 length = 4
 size = (length, length)
 
-screensize = ((check*164)-120, (len(minimap)*164)-120)
-
 COLORS = [white, black, white, white]
 LINK = [1, 0, 3, 0, 2, 0, 1]
 OBJECTS = {"j": junction, "l": link, "a": access}
 
 
 class Presenter:
-    def __init__(self, connections, minimap, core, screensize):
+    def __init__(self, connections, minimap, screensize):
         """This class will visualize the map and cars"""
         self._init_window(screensize)
         self.connections = connections
-        self.core = core
         self.minimap = minimap
         self.point_location = {}
         self.link_vector = {}
@@ -84,7 +66,7 @@ class Presenter:
     @staticmethod
     def _init_window(screensize):
         pygame.init()
-        pygame.display.set_caption("Traffic Controled By Neural Network")
+        pygame.display.set_caption("Traffic Controlled By Neural Network")
 
         screen = pygame.display.set_mode(screensize)
         screen.fill((255, 255, 255))
@@ -94,37 +76,39 @@ class Presenter:
             for indexColm in range(len(self.minimap[indexRow])):
                 if not self.minimap[indexRow][indexColm]:
                     continue
-                x, y = Presenter._minimap_to_grid(
-                    self.minimap[indexRow][indexColm])
+                x, y = self._minimap_to_grid(self.minimap[indexRow][indexColm])
                 Presenter._draw_object(x, y,
                                        OBJECTS[self.minimap[indexRow][indexColm][0]])
                 self.point_location[self.minimap[indexRow]
                                     [indexColm]] = (indexColm, indexRow)
 
-        for connection in self.connections:
-            sorce, dest = connection.split("-")
-            self._process_connection(source=sorce, destination=dest)
+        for source, dest in self.connections:
+            self._process_connection(source=source, destination=dest)
 
     def main_loop(self, core):
         while True:
             core.step()
-
             self._redraw_links(core)
             pygame.display.flip()
-            time.sleep(0.2)
+            time.sleep(0.02)
 
     def _redraw_links(self, core):
         for link in core.links:
             x, y, vec = self.link_vector[link.code]
 
             for index, cell in enumerate(link.queue):
-                Presenter._draw_cell(
-                    x + (index * vec[0]), y + (index * vec[1]), COLORS[cell])
+                if cell == link.queue[index-1] and cell == 1:
+                        Presenter._draw_cell(
+                        x + (index * vec[0]), y + (index * vec[1]), (255,0,0))
 
-    def _minimap_to_grid(pos_name):
-        for k in range(len(minimap)):
-            for l in range(len(minimap[k])):
-                if pos_name == minimap[k][l]:
+                else:
+                    Presenter._draw_cell(
+                        x + (index * vec[0]), y + (index * vec[1]), COLORS[cell])
+
+    def _minimap_to_grid(self, pos_name):
+        for k in range(len(self.minimap)):
+            for l in range(len(self.minimap[k])):
+                if pos_name == self.minimap[k][l]:
                     cordx = l*41
                     cordy = k*41
                     return cordx, cordy
@@ -180,12 +164,13 @@ class Presenter:
         dest, source = source, dest
         vector = (source[0] - dest[0], dest[1] - source[1])
         if vector not in [(0, 1), (1, 0), (-1, 0), (0, -1)]:
+            print("Can't connect")
             exit(1)
         return dest[0], dest[1], vector
 
     def _calculate_start(self, colm, row, vector):
         code = self.minimap[row][colm]
-        x, y = Presenter._minimap_to_grid(code)
+        x, y = self._minimap_to_grid(code)
         # xy
         if vector == (0, 1):
             # up
@@ -208,9 +193,9 @@ class Presenter:
             start_y = y
             vec = (0, 1)
             end_x = start_x - 2
-            end_y = y + 30
+            end_y = y + 29
             destcode = self.minimap[row+1][colm]
-            
+
         elif vector == (-1, 0):
             # left
             x -= 1
@@ -240,18 +225,5 @@ class Presenter:
 
         self.link_vector[forward_str] = (start_x, start_y, vec)
         self.link_vector[backward_str] = (end_x, end_y, (-vec[0], -vec[1]))
-        # print(self.link_vector)
-        return (x, y)
 
-
-def main():
-    core = Core(minimap, connectionsForCore, 5)
-    core.spawn_vehicle()
-    presenter = Presenter(connections, minimap, core, screensize)
-    presenter.main_loop(core)
-
-    input()
-
-
-if __name__ == "__main__":
-    main()
+        return x, y
