@@ -300,6 +300,6 @@ class Core:
 
         start = 0
         for junction in self.junction_points:
-            end = len(junction.outcomming)
+            end = start + len(junction.outcomming)
             junction.set_state(output[start:end])
             start = end

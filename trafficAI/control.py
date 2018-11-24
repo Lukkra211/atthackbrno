@@ -42,7 +42,6 @@ class Controller:
         hidden_layers = layers = system.get('layers', [])
         side_neurons = len(self.core.junction_queues)
         self.layers = [side_neurons] + hidden_layers + [side_neurons]
-        self.layers = [3, 3, 5]
 
     def present(self):
         """
