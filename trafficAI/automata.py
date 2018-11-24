@@ -9,29 +9,6 @@ LINK_LEN = 30
 EMPTY_CELL = 0
 FULL_CELL = 1
 
-# test map part
-"""
-minimap = [
-    ['a01', "l01", 'j01', 'l02', 'a02'],
-    [   '',    '', 'l03'],
-    [   '',    '', 'a03'],
-
-]
-
-connections = [
-                ['a01', "l01"],
-                ["l01", 'j01'],
-                ['j01', 'l02'],
-                ['l02', 'a02'],
-                ['j01', 'l03'],
-                ['l03', 'a03'],
-]
-
-vehicles = 5
-"""
-
-
-# end map part
 
 class Link:
     def __init__(self, source: 'Point', destination: 'Point'):

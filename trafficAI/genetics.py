@@ -62,13 +62,13 @@ class Evolution:
 
         return numpy.array(weights)
 
-    def get_nn(self, individual, normalize=_sigmoid) -> Callable:
+    def get_nn(self, weights, normalize=_sigmoid) -> Callable:
         """
         Create the neural networks which works like a function that only
         takes the inputs, other params are defined by the `Evolution`
         """
         def nn(inputs):
-            return neural_network(inputs, individual['weights'], normalize)
+            return neural_network(inputs, weights, normalize)
         return nn
 
     def breed(self):
