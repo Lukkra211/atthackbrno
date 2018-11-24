@@ -116,12 +116,12 @@ class Presenter:
                     new_x, new_y = x + vector[0] * link_length, y + vector[1] * 30
                 if not open:
                     self._draw_cell(new_x, new_y, red)
-                    #self._draw_cell(new_x+vector[0], new_y+vector[1], red)
-                    #self._draw_cell(new_x-vector[0], new_y-vector[1], red)
+                    self._draw_cell(new_x+vector[1]*1, new_y+vector[0]*1, red)
+                    self._draw_cell(new_x-vector[1]*1, new_y-vector[0]*1, red)
                 else:
                     self._draw_cell(new_x, new_y, green)
-                    #self._draw_cell(new_x+vector[0], new_y+vector[1], green)
-                    #self._draw_cell(new_x-vector[0], new_y-vector[1], green)
+                    self._draw_cell(new_x+vector[1]*1, new_y+vector[0]*1, green)
+                    self._draw_cell(new_x-vector[1]*1, new_y-vector[0]*1, green)
 
     def _redraw_links(self, core):
         """Redraw links will draw the cars"""
