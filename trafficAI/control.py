@@ -5,6 +5,7 @@ import yaml
 
 from automata import Core
 from genetics import Evolution
+from graphic import Presenter
 
 TEST_STEPS = 500
 GENERATIONS = 100
@@ -47,8 +48,8 @@ class Controller:
         """
         Called when the user wants to run the simulation with GUI
         """
-        self.presenter = Presenter(self.connections, self.minimap, self.core)
-        self.presenter.main_loop()
+        self.presenter = Presenter(self.connections, self.minimap, (700, 700))
+        self.presenter.main_loop(self.core)
 
     def validate(self):
         pass
@@ -70,7 +71,6 @@ class Controller:
             self.evolution.rated(individual, self.__rate(individual))
 
             if index % 5 == 0:
-                print('.', end='')
                 sys.stdout.flush()
 
         self.evolution.breed()
