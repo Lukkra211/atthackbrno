@@ -16,7 +16,7 @@ import argparse
 LED_COUNT      = 3      # Number of LED pixels.
 LED_PIN        = 12      # GPIO pin connected to the pixels (18 uses PWM!).
 #LED_PINS       = [12, 18, 40, 52]      # GPIO pin connected to the pixels (18 uses PWM!).
-LED_PINS       = [12, 18]      # GPIO pin connected to the pixels (18 uses PWM!).
+LED_PINS       = [12, 13, 18, 19]      # GPIO pin connected to the pixels (18 uses PWM!).
 #LED_PIN        = 10      # GPIO pin connected to the pixels (10 uses SPI /dev/spidev0.0).
 LED_FREQ_HZ    = 800000  # LED signal frequency in hertz (usually 800khz)
 LED_DMA        = 10      # DMA channel to use for generating signal (try 10)
@@ -40,10 +40,15 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     strips = []
+    yellowDelay = 3
     for ledPin in LED_PINS:
         print(ledPin)
+	if ledPin in [13, 19, 41, 45, 53]:
+		ledChannel =1
+	else:
+		ledChannel = 0
         # Create NeoPixel object with appropriate configuration.
-        strips.append(Adafruit_NeoPixel(LED_COUNT, ledPin, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS, LED_CHANNEL))
+        strips.append(Adafruit_NeoPixel(LED_COUNT, ledPin, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS, ledChannel))
         # Intialize the library (must be called once before other functions).
         strips[-1].begin()
 
@@ -55,28 +60,28 @@ if __name__ == '__main__':
     try:
         print ('  *-*  Simulation started!  *-*  ')
         while True:
-     	    print('TL0: Green! Go!')
-	    print('TL1: Red! Stop!')
+ 	    print('TL0+1: Yellow! Get ready!')
+	    colorWipe(strips[0], Color(255,255,0))  # Yellow wipe
+            colorWipe(strips[1], Color(255,255,0))  # Yellow wipe
+	    time.sleep(yellowDelay)
+     	    print('TL0:   Green! Go!')
             colorWipe(strips[0], Color(255, 0, 0))  # Green wipe
+	    print('TL1:   Red! STOP!')
             colorWipe(strips[1], Color(0, 255, 0))  # Red wipe
             #setColor(strips[1], Color(0, 255, 0))  # Red wipe
 	    time.sleep(10)
-	    print('TL0: Yellow! Break!')
-	    print('TL1: Yellow! Break!')
+	    print('TL0+1: Yellow! Break!')
             colorWipe(strips[0], Color(255,255,0))  # Yellow wipe
             colorWipe(strips[1], Color(255,255,0))  # Yellow wipe
-	    time.sleep(2)
-	    print('TL0: Red! Stop!')
-     	    print('TL1: Green! Go!')
+	    time.sleep(yellowDelay)
+	    print('TL0:   Red! STOP!')
+     	    print('TL1:   Green! Go!')
             colorWipe(strips[0], Color(0, 255, 0))  # Red wipe
             colorWipe(strips[1], Color(255, 0, 0))  # Green wipe
 	    time.sleep(10)
- 	    print('TL0: Yellow! Get ready!')
- 	    print('TL1: Yellow! Get ready!')
-	    colorWipe(strips[0], Color(255,255,0))  # Yellow wipe
-            colorWipe(strips[1], Color(255,255,0))  # Yellow wipe
-	    time.sleep(2)
+
 
     except KeyboardInterrupt:
         if args.clear:
-            colorWipe(strip, Color(0,0,0), 10)
+		for strip in strips:
+			colorWipe(strip, Color(0,0,0), 10)
