@@ -1,0 +1,5 @@
+Click==7.0
+numpy==1.15.4
+pyaml==18.11.0
+pygame==1.9.4
+PyYAML==3.13
