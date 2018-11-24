@@ -138,7 +138,6 @@ class AccessPoint(Point):
 
     def _redirect(self, link):
         self.callback()
-        print(".", end="")
         return True
 
     def generate(self):
@@ -203,6 +202,7 @@ class Core:
         self.links = []
 
         self.nn = False
+        self.step_no = 0
         self.__process(minimap, connections)
 
     def __process(self, minimap, connections):
@@ -269,28 +269,3 @@ class Core:
 
         for access_point in self.access_points:
             access_point.step()
-
-        # test part
-        """
-        for link in self.links:
-            print(link.code, link.queue)
-        """
-        # end test part
-
-
-def main():
-    # test part
-    """
-    test = Core(minimap, connections, vehicles)
-    for i in range(5):
-
-        test.spawn_vehicle()
-    for i in range(90):
-        test.step()
-        input()
-    """
-    # end test part
-
-
-if __name__ == "__main__":
-    main()

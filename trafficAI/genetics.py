@@ -8,12 +8,32 @@ MUTATE_CHANCE = 0.9
 MERGE_RATIO = 0.95
 
 
-def neural_network(inputs, weights, normalize, layers):
+def neural_network(inputs, weights, normalize):
+    """
+    The naked neural network
+
+    Args:
+        inputs: inputs to the input layers
+        weights: numpy matrices representing the weights between the layers
+            of neurons
+        normalize: the function that process the neuron value further; commonly
+            used range is from 0 to 1
+
+    Note:
+        the @ operator represents matrice multiplication
+
+    """
     results = normalize(numpy.vstack(inputs))
-    pass
+    for weight in weights:
+        results = normalize(weight @ results)
+
+    return results
 
 
-def default_normalize(x):
+def _sigmoid(x):
+    """
+    Most commonly used normalizing function
+    """
     return 1 / (1 + numpy.exp(-x))
 
 
@@ -26,7 +46,6 @@ class Evolution:
         self.best_fit = None
 
     def __compute_layers(self):
-
         pass
 
     def __generate_queue(self):
@@ -46,13 +65,13 @@ class Evolution:
 
         return numpy.array(weights)
 
-    def get_nn(self, weights, normalize=default_normalize) -> Callable:
+    def get_nn(self, weights, normalize=_sigmoid) -> Callable:
         """
         Create the neural networks which works like a function that only
         takes the inputs, other params are defined by the `Evolution`
         """
         def nn(inputs):
-            return neural_network(inputs, weights, normalize, self.layers)
+            return neural_network(inputs, weights, normalize)
         return nn
 
     def breed(self):
