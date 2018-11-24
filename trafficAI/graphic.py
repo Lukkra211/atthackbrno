@@ -39,8 +39,8 @@ link = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ]]
 
 minimap = [['a01', 'l04', 'a02'],
-           ['a03', '', 'a04']]
-connections = ['a03-a01', 'a01-l04', 'l04-a02', 'a02-a04']
+           ['a03', 'j05', 'a04']]
+connections = ['a03-a01','a01-l04', 'l04-a02','a02-a04','a03-j05','j05-a04']
 connectionsForCore = []
 
 for connection in connections:
@@ -85,7 +85,7 @@ class Presenter:
     @staticmethod
     def _init_window(screensize):
         pygame.init()
-        pygame.display.set_caption("Traffic Controled By Neural Network")
+        pygame.display.set_caption("Traffic Controlled By Neural Network")
 
         screen = pygame.display.set_mode(screensize)
         screen.fill((255, 255, 255))
@@ -109,10 +109,9 @@ class Presenter:
     def main_loop(self, core):
         while True:
             core.step()
-
             self._redraw_links(core)
             pygame.display.flip()
-            time.sleep(0.2)
+            time.sleep(0.02)
 
     def _redraw_links(self, core):
         for link in core.links:
@@ -210,7 +209,7 @@ class Presenter:
             start_y = y
             vec = (0, 1)
             end_x = start_x - 2
-            end_y = y + 30
+            end_y = y + 29
             destcode = self.minimap[row+1][colm]
 
         elif vector == (-1, 0):
@@ -242,15 +241,14 @@ class Presenter:
 
         self.link_vector[forward_str] = (start_x, start_y, vec)
         self.link_vector[backward_str] = (end_x, end_y, (-vec[0], -vec[1]))
-        return (x, y)
+        return x, y
 
 
 def main():
-    core = Core(minimap, connectionsForCore, 5)
+    core = Core(minimap, connectionsForCore, 15)
     core.spawn_vehicle()
     presenter = Presenter(connections, minimap, core, screensize)
     presenter.main_loop(core)
-
     input()
 
 
