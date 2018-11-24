@@ -91,6 +91,9 @@ class Presenter:
             self._redraw_links(core)
             pygame.display.flip()
             time.sleep(0.02)
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
 
     def _redraw_links(self, core):
         for link in core.links:
