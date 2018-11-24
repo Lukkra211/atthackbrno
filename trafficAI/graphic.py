@@ -40,7 +40,7 @@ link = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
 
 minimap = [['a01', 'l04', 'a02'],
            ['a03', 'j05', 'a04']]
-connections = ['a03-a01','a01-l04', 'l04-a02','a02-a04','a03-j05','j05-a04']
+connections = ['a03-a01','a01-l04', 'l04-a02','a02-a04','a03-j05']
 connectionsForCore = []
 
 for connection in connections:
@@ -118,8 +118,13 @@ class Presenter:
             x, y, vec = self.link_vector[link.code]
 
             for index, cell in enumerate(link.queue):
-                Presenter._draw_cell(
-                    x + (index * vec[0]), y + (index * vec[1]), COLORS[cell])
+                if cell == link.queue[index-1] and cell == 1:
+                        Presenter._draw_cell(
+                        x + (index * vec[0]), y + (index * vec[1]), (255,0,0))
+
+                else:
+                    Presenter._draw_cell(
+                        x + (index * vec[0]), y + (index * vec[1]), COLORS[cell])
 
     def _minimap_to_grid(pos_name):
         for k in range(len(minimap)):
