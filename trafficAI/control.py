@@ -58,10 +58,16 @@ class Controller:
         """
         Called when the user wants to train the AI for a given system from YAML
         """
-        self.evolution = Evolution(self.layers)
+        try:
+            self.evolution = Evolution(self.layers)
 
-        for _ in range(GENERATIONS):
-            self.__train()
+            for _ in range(GENERATIONS):
+                self.__train()
+                print('')
+
+        finally:
+            self.core.reset(self.evolution.get_nn(self.evolution.best_fit))
+            self.present()
 
     def __train(self):
         """
@@ -71,6 +77,7 @@ class Controller:
             self.evolution.rated(individual, self.__rate(individual))
 
             if index % 5 == 0:
+                print('.', end='')
                 sys.stdout.flush()
 
         self.evolution.breed()
