@@ -38,7 +38,6 @@ link = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ]]
 
-
 black = (0, 0, 0)
 white = (255, 255, 255)
 
@@ -67,7 +66,7 @@ class Presenter:
     @staticmethod
     def _init_window(screensize):
         pygame.init()
-        pygame.display.set_caption("Traffic Controled By Neural Network")
+        pygame.display.set_caption("Traffic Controlled By Neural Network")
 
         screen = pygame.display.set_mode(screensize)
         screen.fill((255, 255, 255))
@@ -89,7 +88,6 @@ class Presenter:
     def main_loop(self, core):
         while True:
             core.step()
-
             self._redraw_links(core)
             pygame.display.flip()
             time.sleep(0.02)
@@ -99,8 +97,13 @@ class Presenter:
             x, y, vec = self.link_vector[link.code]
 
             for index, cell in enumerate(link.queue):
-                Presenter._draw_cell(
-                    x + (index * vec[0]), y + (index * vec[1]), COLORS[cell])
+                if cell == link.queue[index-1] and cell == 1:
+                        Presenter._draw_cell(
+                        x + (index * vec[0]), y + (index * vec[1]), (255,0,0))
+
+                else:
+                    Presenter._draw_cell(
+                        x + (index * vec[0]), y + (index * vec[1]), COLORS[cell])
 
     def _minimap_to_grid(self, pos_name):
         for k in range(len(self.minimap)):
@@ -161,6 +164,7 @@ class Presenter:
         dest, source = source, dest
         vector = (source[0] - dest[0], dest[1] - source[1])
         if vector not in [(0, 1), (1, 0), (-1, 0), (0, -1)]:
+            print("Can't connect")
             exit(1)
         return dest[0], dest[1], vector
 
@@ -189,9 +193,9 @@ class Presenter:
             start_y = y
             vec = (0, 1)
             end_x = start_x - 2
-            end_y = y + 30
+            end_y = y + 29
             destcode = self.minimap[row+1][colm]
-            
+
         elif vector == (-1, 0):
             # left
             x -= 1
@@ -221,4 +225,5 @@ class Presenter:
 
         self.link_vector[forward_str] = (start_x, start_y, vec)
         self.link_vector[backward_str] = (end_x, end_y, (-vec[0], -vec[1]))
-        return (x, y)
+
+        return x, y
