@@ -1,5 +1,8 @@
-import pygame
 import time
+import os
+
+import pygame
+
 from automata import Core
 
 access = [[0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, ],
@@ -50,7 +53,7 @@ cell_red = 3
 cell_colors = {cell_filled: black, cell_empty: white,
                cell_green: green, cell_red: red}
 
-length = 4
+length = int(os.environ.get('CELL_SIZE', 4))
 size = (length, length)
 
 COLORS = [white, black, white, white]
