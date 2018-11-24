@@ -1,5 +1,5 @@
 <?php 
-echo "<!--
+echo "
 	<center>
 		<div align='center' class='footer'>
             <div class='footer-content'>
@@ -10,7 +10,7 @@ echo "<!--
                 </p>
             </div>
 		</div>
-	</center>-->
+	</center>
 </body>
 </html>";
 ?>

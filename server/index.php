@@ -36,14 +36,47 @@
         <center>
             <div style="background-color: rgba(255, 255, 255, 0.75);" class="mui-panel">
                 <h1>Traffic AI</h1>
-                <h2>Welcome</h2>
-                <form enctype="multipart/form-data" action="uploadFile.php" method="POST">
+                <form enctype="multipart/form-data" action="action.php" method="POST">
+                    <table style='background-color: transparent; width: 100%; ' width="100%">
+                        <tr style='width: 100%;'>
+                            <td style='width: 60px; '>
+                                <h3 style='text-align: left; '>Job:</h3>
+                            </td>
+                            <td>
+                                <div class="mui-textfield mui-textfield--float-label">
+                                    <input type="text" name="nameOfTheJob" required>
+                                    <label>Name of the job</label>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                    <table style='background-color: transparent; width: 100%; ' width="100%">
+                        <tr style='width: 100%;'>
+                            <td style='width: 60px; '>
+                                <div class="mui-checkbox">
+                                    <label>
+                                      <input type="checkbox" value="infinit">
+                                      Infinit
+                                    </label>
+                                  </div>
+                            </td>
+                            <td>
+                                <div class="mui-textfield mui-textfield--float-label">
+                                    <input type="number" name="numberOfInteraction" min="0" required>
+                                    <label>Number of iteration</label>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                    
+                    <br>
                     <input type="hidden" name="MAX_FILE_SIZE" value="300000" />
                     <b>Choose File:</b> <input style='cursor: pointer; ' name="userfile" type="file" required />
                     <br>
-                    <input type="submit" value="Send File" id="submitButton" onclick="change()" class="mui-btn mui-btn--primary mui-btn--raised"/>
+                    <input type="submit" value="Start The Job" id="submitButton" onclick="change()" class="mui-btn mui-btn--primary mui-btn--raised"/>
+                    <br>
                 </form>
+        
             </div>
         </center>
-    </div>
 <?php include realpath($_SERVER['DOCUMENT_ROOT']).'/htmlParts/footer.php';?>

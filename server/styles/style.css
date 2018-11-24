@@ -1,8 +1,9 @@
 @font-face{font-family: Trebuchet MS; src: url('/fonts/TrebuchetMS.ttf');}
 html{
     height: 100%;
-    background: url("/images/background.jpg");
-    background-color: rgba(255,165,0, 1);    /*rgba(128,255,0, 0.6);*/
+    background: url("/images/background.png");
+    background-color: rgba(255,165,0, 0.87);    /*rgba(128,255,0, 0.6);*/
+    
     background-position: center;
     /*background-repeat: no-repeat;*/
     background-size: cover;
@@ -15,8 +16,13 @@ body{
     font-family: Trebuchet MS;
     /*min-width: 600px;*/
 }
-pre{
-    color: white;
+#myBar {
+    width: 10%;
+    height: 30px;
+    background-color: rgba(76,175,80, 0.85);
+    text-align: center; /* To center it horizontally (if you want) */
+    line-height: 30px; /* To center it vertically */
+    color: white; 
 }
 .mui-panel{
     background-color: rgba( 255, 255, 255, 0.85);
