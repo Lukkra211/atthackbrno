@@ -57,7 +57,7 @@ OBJECTS = {"j": junction, "l": link, "a": access}
 
 class Presenter:
     def __init__(self, connections, minimap, screensize):
-        """This class will visualize the map and cars"""
+        """This class will innit the functionality"""
         self._init_window(screensize)
         self.connections = connections
         self.minimap = minimap
@@ -67,6 +67,7 @@ class Presenter:
 
     @staticmethod
     def _init_window(screensize):
+        """ This class will innit pygame a set background to white"""
         pygame.init()
         pygame.display.set_caption("Traffic Controlled By Neural Network")
 
@@ -74,6 +75,7 @@ class Presenter:
         screen.fill((255, 255, 255))
 
     def _process(self):
+        """Take minimap and connections and send then to draw"""
         for indexRow in range(len(self.minimap)):
             for indexColm in range(len(self.minimap[indexRow])):
                 if not self.minimap[indexRow][indexColm]:
@@ -88,6 +90,7 @@ class Presenter:
             self._process_connection(source=source, destination=dest)
 
     def main_loop(self, core):
+        """Main loopupdates of display"""
         while True:
             core.step()
             self._redraw_links(core)
@@ -99,6 +102,7 @@ class Presenter:
                     exit(0)
 
     def _redraw_links(self, core):
+        """Redraw links will draw the cars"""
         for link in core.links:
             x, y, vec = self.link_vector[link.code]
 
@@ -112,6 +116,7 @@ class Presenter:
                         x + (index * vec[0]), y + (index * vec[1]), COLORS[cell])
 
     def _minimap_to_grid(self, pos_name):
+        """ geting grid coordinates from name of the object"""
         for k in range(len(self.minimap)):
             for l in range(len(self.minimap[k])):
                 if pos_name == self.minimap[k][l]:
@@ -121,6 +126,7 @@ class Presenter:
 
     @staticmethod
     def _draw_object(horizontal, vertical, array):
+        """This will draw an object"""
         for hor_s, row in enumerate(array):
             for ver_s, cell in enumerate(row):
                 hor = horizontal + hor_s
@@ -129,6 +135,7 @@ class Presenter:
 
     @staticmethod
     def _draw_cell(x, y, color):
+        """This will draw a single cell to the screen"""
         px = x * length
         py = y * length
 
@@ -160,7 +167,7 @@ class Presenter:
                                          i, COLORS[LINK[i]])
 
     def _get_source_info(self, code1, code2):
-        """ Get info of the """
+        """ Get info of the objects"""
         source = self.point_location[code1]
         dest = self.point_location[code2]
 
@@ -172,6 +179,7 @@ class Presenter:
         return dest[0], dest[1], vector
 
     def _calculate_start(self, colm, row, vector):
+        """This will claculate start point of the links"""
         code = self.minimap[row][colm]
         x, y = self._minimap_to_grid(code)
         # xy
