@@ -2,6 +2,7 @@
 from numpy import random
 import itertools
 from itertools import chain
+import time
 
 # CONSTANTS
 LINK_LEN = 30
@@ -154,7 +155,13 @@ class AccessPoint(Point):
             if possible_link.generate():
                 self.to_generate -= 1
                 self.skip = True
+                return
         self.inactive = True
+
+    def reset(self):
+        self.to_generate = 0
+        self.inactive = False
+        self.skip = False
 
 
 class JunctionPoint(Point):
@@ -182,7 +189,6 @@ class Core:
     Works with AI and is controlled by Controller
     In init method implements minimap, connections and vehicles
     """
-
     def __init__(self, minimap: list, connections: list, vehicles: int):
 
         self.TYPES = {"a": AccessPoint,
@@ -222,11 +228,11 @@ class Core:
     def __exec_nn(self):
         pass
 
-    def reset(self):
-        self.nn = False
+    def reset(self, nn=None):
+        self.nn = nn
         for link in self.links:
             link.reset()
-        for point in self.points.values():
+        for point in self.access_points:
             point.reset()
 
     def spawn_vehicle(self):
@@ -253,11 +259,11 @@ class Core:
         self.access_points.sort(key=lambda point: point.code)
         for point in self.points.values():
             point.lock()
+
         for _ in range(self.vehicles):
             self.spawn_vehicle()
 
     def step(self):
-
         for link in self.links:
             link.step()
 

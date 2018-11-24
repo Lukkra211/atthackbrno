@@ -1,0 +1,9 @@
+---
+minimap:
+ -  ['a01', 'l01', 'a02']
+
+connections:
+ -  ['a01', 'l01']
+ -  ['l01', 'a02']
+
+vehicles: 10
