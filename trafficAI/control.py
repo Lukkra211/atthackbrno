@@ -11,6 +11,9 @@ GENERATIONS = 100
 
 
 class Controller:
+    """
+    Class which glues the project components together
+    """
     def __init__(self):
         self.minimap = None
         self.connections = None
@@ -23,7 +26,7 @@ class Controller:
 
     def load_system(self, system):
         """
-        system: path to system (yaml)
+        Load the system from a YAML file
         """
         with open(system, 'r') as f:
             system = yaml.load(f)
@@ -41,6 +44,9 @@ class Controller:
         self.layers = [3, 3, 5]
 
     def present(self):
+        """
+        Called when the user wants to run the simulation with GUI
+        """
         self.presenter = Presenter(self.connections, self.minimap, self.core)
         self.presenter.main_loop()
 
@@ -48,12 +54,18 @@ class Controller:
         pass
 
     def develop(self):
+        """
+        Called when the user wants to train the AI for a given system from YAML
+        """
         self.evolution = Evolution(self.layers)
 
         for _ in range(GENERATIONS):
             self.__train()
 
     def __train(self):
+        """
+        Evaluate the population of current generation and breed them
+        """
         for index, individual in enumerate(self.evolution.queue):
             self.evolution.rated(individual, self.__rate(individual))
 
@@ -64,6 +76,9 @@ class Controller:
         self.evolution.breed()
 
     def __rate(self, individual):
+        """
+        Evaluate how good the AI was
+        """
         self.core.reset(self.evolution.get_nn(individual))
 
         stucked = 0
