@@ -42,13 +42,12 @@ class Controller:
         hidden_layers = layers = system.get('layers', [])
         side_neurons = len(self.core.junction_queues)
         self.layers = [side_neurons] + hidden_layers + [side_neurons]
-        self.layers = [3, 3, 5]
 
     def present(self):
         """
         Called when the user wants to run the simulation with GUI
         """
-        self.presenter = Presenter(self.connections, self.minimap, (700, 700))
+        self.presenter = Presenter(self.connections, self.minimap, (900, 900))
         self.presenter.main_loop(self.core)
 
     def validate(self):
@@ -58,10 +57,16 @@ class Controller:
         """
         Called when the user wants to train the AI for a given system from YAML
         """
-        self.evolution = Evolution(self.layers)
+        try:
+            self.evolution = Evolution(self.layers)
 
-        for _ in range(GENERATIONS):
-            self.__train()
+            for _ in range(GENERATIONS):
+                self.__train()
+                print('')
+
+        finally:
+            self.core.reset(self.evolution.get_nn(self.evolution.best_fit))
+            self.present()
 
     def __train(self):
         """
@@ -71,6 +76,7 @@ class Controller:
             self.evolution.rated(individual, self.__rate(individual))
 
             if index % 5 == 0:
+                print('.', end='')
                 sys.stdout.flush()
 
         self.evolution.breed()

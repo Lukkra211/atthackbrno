@@ -235,8 +235,7 @@ class Presenter:
         dest, source = source, dest
         vector = (source[0] - dest[0], dest[1] - source[1])
         if vector not in [(0, 1), (1, 0), (-1, 0), (0, -1)]:
-            print("Can't connect")
-            exit(1)
+            raise RuntimeError('Unsupported vector')
         return dest[0], dest[1], vector
 
     def _calculate_start(self, colm, row, vector):

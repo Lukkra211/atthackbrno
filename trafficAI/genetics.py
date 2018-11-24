@@ -45,9 +45,6 @@ class Evolution:
 
         self.best_fit = None
 
-    def __compute_layers(self):
-        pass
-
     def __generate_queue(self):
         return [{'number': i, 'stucked': 0, 'weights': self.__generate_dna()}
                 for i in range(POPULATION)]
@@ -65,13 +62,13 @@ class Evolution:
 
         return numpy.array(weights)
 
-    def get_nn(self, weights, normalize=_sigmoid) -> Callable:
+    def get_nn(self, individual, normalize=_sigmoid) -> Callable:
         """
         Create the neural networks which works like a function that only
         takes the inputs, other params are defined by the `Evolution`
         """
         def nn(inputs):
-            return neural_network(inputs, weights, normalize)
+            return neural_network(inputs, individual['weights'], normalize)
         return nn
 
     def breed(self):
@@ -86,6 +83,12 @@ class Evolution:
         """
         self.queue = []
         self.population.sort(key=lambda x: x['stucked'])
+
+        best = self.population[0]
+        print(' ', best['stucked'], sep=' ')
+        if not self.best_fit or best['stucked'] < self.best_fit['stucked']:
+            self.best_fit = best
+            print(' WINRAR')
 
         maximum = self.population[-1]['stucked']
 
@@ -141,5 +144,5 @@ class Evolution:
         """
         for layer in weights:
             mask = numpy.random.random(layer.shape) >= MUTATE_CHANCE
-            randomly_created = numpy.random.random(layer.shape)
-            layer[mask] = randomly_created[mask]
+            randomly_created = numpy.random.random(layer.shape) - 1
+            layer[mask] += randomly_created[mask]
