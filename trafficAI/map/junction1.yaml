@@ -23,6 +23,6 @@ connections:
  -  ['l03', 'l04']
 
 
-vehicles: 100
+vehicles: 150
 
 
