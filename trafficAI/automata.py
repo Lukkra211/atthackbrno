@@ -18,8 +18,6 @@ FULL_CELL = 1
 # Transport structures
 # ====================
 
-
-
 class Link:
     """
     One directional link between two traffic points
@@ -280,20 +278,21 @@ class JunctionPoint(Point):
         if self.open[link.code]:
             for _ in range(len(self.outcomming)):
                 possible_link = next(self.outcomming_cicle)
-                if possible_link.code != link.reverse_code and possible_link._redirect():
+                if (possible_link.code != link.reverse_code
+                        and possible_link._redirect()):
                     return True
                 else:
                     continue
         else:
             return False
 
-    def lock(self):
+    def lock(self) -> None:
         super().lock()
 
         self.open = {link.code: False for link in self.incomming}
         self.keys = sorted(self.open.keys())
 
-    def set_state(self, numbers):
+    def set_state(self, numbers) -> None:
         maximum = max(numbers)
 
         for index in range(len(numbers)):
@@ -388,7 +387,6 @@ class Core:
             self.create_links(*connection)
         self.finalize()
 
-
     def reset(self, nn=None) -> None:
         """
         Set the system to the initial state
@@ -449,7 +447,6 @@ class Core:
         point1.register_links(incomming=link2, outcomming=link1)
         point2.register_links(incomming=link1, outcomming=link2)
 
-
     def finalize(self) -> None:
         """
         Make final initialization which need all data to be set
@@ -464,10 +461,8 @@ class Core:
         initialization since they finally have all data needed.
         """
 
-    def finalize(self):
         self.junction_points.sort(key=lambda point: point.code)
         self.junction_queues.sort(key=lambda link: link.code)
-
 
         self.links.sort(key=lambda link: link.code)
         self.access_points.sort(key=lambda point: point.code)

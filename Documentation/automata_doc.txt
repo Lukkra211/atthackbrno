@@ -1,0 +1,255 @@
+
+				Cellular automata simulating traffic
+
+# ====================
+# Transport structures
+# ====================
+
+class Link:
+
+    One directional link between two traffic points
+
+    When two connections are pointing to LinkPoint, the self.destination is
+    actually another ``Link`` instead of ``Point`` object. Thats why the Link
+    objects requires ``_redirect`` method to imitate point behaviour.
+
+    Params:
+        source: traffic point that puts vehicles on the link
+        destination: traffic point that receives the vehicles from this link
+
+    Args:
+        queue: line on which the vehicles are placed and moved forward
+
+ 
+	def step(self) -> None:
+
+        	Moves cars forward, or forwards them to the destination point
+        
+	def reset(self) -> None:
+
+        	Set the link to the initial state
+
+	def generate(self, empty_cells=1) -> bool:
+
+        	Spawn new vehicle on the road
+
+        	Returns:
+            	(bool): True if generated successfully, False otherwise
+
+
+	def is_empty(self, span: int = 1) -> bool:
+
+        	Return true if selected number of spaces are empty, false otherwise
+
+        	Params:
+            	span: how much space should be empty
+
+        
+	def _redirect(self, *_) -> bool:
+
+        	If theres a space for a vehicle, generate it
+
+        	Returns:
+            	(bool): True if redirected successfully, False otherwise
+
+
+
+class LinkPoint:
+
+    Point that is actually doing pretty much nothing besides connecting the
+    links to each other. The links are actually not connected to the LinkPoint
+    but to the other link in the way.
+
+    Params:
+        code: name of the traffic point
+
+    Args:
+        incoming: list of incoming links
+        outcoming: list of outcoming links
+        registered: number of registered links, should be exactly 4
+
+	def register_links(self, incoming: Link, outcoming: Link) -> None:
+
+		Add links to lists and Increasing register attribute.
+
+	def lock(self) -> None:
+
+        	Connects the links and check the connections
+
+
+# ==================
+# Logical structures
+# ==================
+
+class Point:
+
+    Parent of all points that take cares about the logic of the cars.
+    
+
+	def register_links(self, incoming: Link, outcoming: Link) -> None:
+
+        	To notify the point, that there's a link to it.
+
+	def lock(self) -> None:
+
+        	Prepare the point for its function. All data should be already in place
+
+	def _redirect(self, link) -> bool:
+
+        	The method tries to process the incomming vehicle
+
+        	Params:
+            	link: the link which wants one of its vehicle to be processed by
+                	the point, so link can forget the vehicle
+
+        	Returns:
+            		(bool): True if generated successfully, False otherwise
+
+
+
+class AccessPoint(Point):
+
+    Class that symbolize the border of our traffic area
+    
+	def generate(self) -> None:
+ 
+        	Increase the counter of vehicles, that should be spawned
+        
+
+	def step(self) -> None:
+
+        	Try to generate vehicle
+        
+
+	def _redirect(self, *_) -> bool:
+
+        	There is no redirection here. The vehicle just dissapears since it gets
+        	out of the traffic map. It is assumed that traffic beyond the system is
+        	perfect, therefore the point cannot be blocked. The controller have to
+        	be notified thought so new vehicle will be spawned to balance the total
+        	number of vehicles.
+
+	def reset(self) -> None:
+
+        	Set the point to the initial state
+
+
+class JunctionPoint(Point):
+ 
+    Junction which may connect more than two connections. At the time only one
+    incoming link isn't blocked.
+
+    Args:
+        open: maps outcoming links to boolean which determine if the link is
+            closed. If true, vehicles pass, otherwise they are blocked.
+
+
+	def _redirect(self, link) -> bool:
+
+        	Try to process a vehicles from opened link. The vehicle cannot be send
+        	to back to the point where it comes from.
+
+	def lock(self) -> None:
+		TODO: Add some comments
+
+	def set_state(self, numbers) -> None:
+		TODO: Add some comments
+
+class Core:
+
+    Initialize, connects and finally control traffic objects
+
+    Note:
+        The ID belonging to traffic point is called 'code'. The code is string
+        containing one letter and number. The letter specifies type of traffic
+        point
+
+        Traffic point character identificator:
+            a - Access point
+            j - Junction point
+            l - Link point
+
+        It's important do distinguish the link, which is one-way queue from one
+        traffic point to the another, and connection, which is made of two
+        links in order to provide two-directional flow.
+
+    Params:
+        TYPES Dict[str, Point]: mapps character identifier to the
+            initialization method of the related class
+
+        junction_points List[JunctionPoint]: list of junctions
+        junction_queues Link[Link]: list of links that heads to JunctionPoints
+        access_points List[AccessPoint]: list of points generating vehicles
+        points Dict[str, Point]: list of all points, access points included
+        links List[Link]: list of all links between points
+
+        nn Callable[[List[List[int]]], List[int]]=None: represents the
+            neural network
+        vehicles int: number of vehicles in the system simultaneously
+        step int: counter of steps
+
+        
+
+	def __process(self, minimap, connection) -> None:
+
+        	Process given minimap and links between the points
+
+        	Args:
+            		minimap: 2D map of traffic points
+            		connections: connections between traffic points
+            		vehicles: number of vehicles in the system simultaneously
+
+
+	def spawn_vehicle(self) -> None:
+
+        	Spawn one vehicle to the map
+
+        	This function is called at the __init__ of the controler and also by
+        	access points as a callback when vehicle arrived to it.
+
+	def reset(self, nn=None) -> None:
+
+        	Set the system to the initial state
+
+        	Since the reset is used mainly for the training of different
+        	NN, the method can also be used to inject the nn
+
+        	Args:
+            		nn: neural network to be used
+
+
+	def create_links(self, code1: str, code2:str) -> None:
+
+        	Create links between given points
+
+        	Two contradictory links are created. These links are registered to each
+        	traffic point and added to list of links.
+
+        	Links that heads into JunctionPoints are added to
+        	``self.junction_queues``
+
+        	Args:
+            	code1: The code of first traffic point
+            	code2: The code of second traffic point
+
+
+	def finalize(self) -> None:
+
+        	Make final initialization which need all data to be set
+
+        	The junctions and links are sorted by code. Because they are related to
+        	the neural network, they need to stay in the same order. By sorting
+        	these objects, even when the YAML file changes in a way, that does not
+        	change the simulation environment, e. g. swapping names in the
+        	connection definition, the network will still work.
+
+        	Also tells traffic points that they can perform their final
+        	initialization since they finally have all data needed.
+
+	def step(self) -> None:
+
+        	Perform one step
+
+        	Every ``EVALUATE_STEP`` the nn will process the data
+
+
