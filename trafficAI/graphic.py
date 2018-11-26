@@ -212,10 +212,10 @@ class Presenter:
             x += 2
             y -= 1
 
-            start_x = x + 2
+            start_x = x + 4
             start_y = y
             vec = (0, -1)
-            end_x = start_x + 2
+            end_x = start_x - 2
             end_y = y - 29
             destcode = self.minimap[row-1][colm]
 
@@ -224,10 +224,10 @@ class Presenter:
             x += 8
             y += 11
 
-            start_x = x - 2
+            start_x = x - 4
             start_y = y
             vec = (0, 1)
-            end_x = start_x - 2
+            end_x = start_x + 2
             end_y = y + 29
             destcode = self.minimap[row+1][colm]
 
@@ -237,10 +237,10 @@ class Presenter:
             y += 2
 
             start_x = x
-            start_y = y + 4
+            start_y = y + 2
             vec = (-1, 0)
             end_x = x - 29
-            end_y = start_y - 2
+            end_y = start_y + 2
             destcode = self.minimap[row][colm-1]
 
         elif vector == (1, 0):
@@ -249,9 +249,9 @@ class Presenter:
             y += 2
 
             start_x = x
-            start_y = y+2
+            start_y = y + 4
             end_x = x + 29
-            end_y = start_y + 2
+            end_y = start_y - 2
             vec = (1, 0)
             destcode = self.minimap[row][colm+1]
 
