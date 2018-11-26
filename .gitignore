@@ -1,0 +1,3 @@
+*.ai
+trafficAI/__pycache__/
+.idea/
