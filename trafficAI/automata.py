@@ -13,9 +13,11 @@ LINK_LEN = 30
 EMPTY_CELL = 0
 FULL_CELL = 1
 
+
 # ====================
 # Transport structures
 # ====================
+
 
 
 class Link:
@@ -271,11 +273,11 @@ class JunctionPoint(Point):
     def __init__(self, code):
         super().__init__(self)
         self.code = code
+        self.open = []
+        self.keys = []
 
     def _redirect(self, link) -> bool:
-
-        # if self.open[link.code]:
-        if True:  # self.links
+        if self.open[link.code]:
             for _ in range(len(self.outcomming)):
                 possible_link = next(self.outcomming_cicle)
                 if possible_link.code != link.reverse_code and possible_link._redirect():
@@ -284,6 +286,23 @@ class JunctionPoint(Point):
                     continue
         else:
             return False
+
+    def lock(self):
+        super().lock()
+
+        self.open = {link.code: False for link in self.incomming}
+        self.keys = sorted(self.open.keys())
+
+    def set_state(self, numbers):
+        maximum = max(numbers)
+
+        for index in range(len(numbers)):
+            if numbers[index] != maximum:
+                continue
+
+            selected_key = self.keys[index]
+            for key in self.open:
+                self.open[key] = key == selected_key
 
 
 class Core:
@@ -369,6 +388,7 @@ class Core:
             self.create_links(*connection)
         self.finalize()
 
+
     def reset(self, nn=None) -> None:
         """
         Set the system to the initial state
@@ -380,11 +400,15 @@ class Core:
             nn: neural network to be used
 
         """
+
         self.nn = nn
         for link in self.links:
             link.reset()
         for point in self.access_points:
             point.reset()
+
+        for _ in range(self.vehicles):
+            self.spawn_vehicle()
 
     def spawn_vehicle(self) -> None:
         """
@@ -393,6 +417,7 @@ class Core:
         This function is called at the __init__ of the controler and also by
         access points as a callback when vehicle arrived to it.
         """
+
         random.choice(self.access_points).generate()
 
     def create_links(self, code1: str, code2: str) -> None:
@@ -417,12 +442,13 @@ class Core:
 
         self.links.extend((link1, link2))
         if code1[0] == "j":
-            self.junction_queues.append(point2)
+            self.junction_queues.append(link2)
         if code2[0] == "j":
-            self.junction_queues.append(point1)
+            self.junction_queues.append(link1)
 
         point1.register_links(incomming=link2, outcomming=link1)
         point2.register_links(incomming=link1, outcomming=link2)
+
 
     def finalize(self) -> None:
         """
@@ -438,8 +464,14 @@ class Core:
         initialization since they finally have all data needed.
         """
 
+    def finalize(self):
+        self.junction_points.sort(key=lambda point: point.code)
+        self.junction_queues.sort(key=lambda link: link.code)
+
+
         self.links.sort(key=lambda link: link.code)
         self.access_points.sort(key=lambda point: point.code)
+
         for point in self.points.values():
             point.lock()
 
@@ -457,3 +489,17 @@ class Core:
 
         for access_point in self.access_points:
             access_point.step()
+
+        if self.nn and self.step_no % 30 == 0:
+            self.__execute_nn()
+        self.step_no += 1
+
+    def __execute_nn(self):
+        inputs = [link.stucked for link in self.junction_queues]
+        output = self.nn(inputs)
+
+        start = 0
+        for junction in self.junction_points:
+            end = start + len(junction.outcomming)
+            junction.set_state(output[start:end])
+            start = end
