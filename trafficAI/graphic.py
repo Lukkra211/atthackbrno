@@ -113,18 +113,21 @@ class Presenter:
         for jp in core.junction_points:
             for code, open in jp.open.items():
                 x, y, vector = self.link_vector[code]
+                vector_v0 = vector[0]*1
+                vector_v1 = vector[1]*1
                 if(code[0] == 'j'):
                     new_x, new_y = x - vector[0], y - vector[1]
                 else:
-                    new_x, new_y = x + vector[0] * link_length, y + vector[1] * 30
+                    new_x, new_y = x+vector[0] * link_length, y+vector[1] * 30
                 if not open:
+                    vector_var = vector[1]*1
                     self._draw_cell(new_x, new_y, red)
-                    self._draw_cell(new_x+vector[1]*1, new_y+vector[0]*1, red)
-                    self._draw_cell(new_x-vector[1]*1, new_y-vector[0]*1, red)
+                    self._draw_cell(new_x+vector_v1, new_y+vector_v0, red)
+                    self._draw_cell(new_x-vector_v1, new_y-vector_v0, red)
                 else:
                     self._draw_cell(new_x, new_y, green)
-                    self._draw_cell(new_x+vector[1]*1, new_y+vector[0]*1, green)
-                    self._draw_cell(new_x-vector[1]*1, new_y-vector[0]*1, green)
+                    self._draw_cell(new_x+vector_v1, new_y+vector_v0, green)
+                    self._draw_cell(new_x-vector_v1, new_y-vector_v0, green)
 
     def _redraw_links(self, core):
         """Redraw links will draw the cars"""
@@ -138,7 +141,7 @@ class Presenter:
 
                 else:
                     Presenter._draw_cell(
-                        x + (index * vec[0]), y + (index * vec[1]), COLORS[cell])
+                        x+(index * vec[0]), y+(index * vec[1]), COLORS[cell])
 
     def _minimap_to_grid(self, pos_name):
         """ geting grid coordinates from name of the object"""

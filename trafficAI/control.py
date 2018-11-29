@@ -1,5 +1,6 @@
 import random
 import sys
+import time
 
 import yaml
 import numpy
@@ -72,6 +73,24 @@ class Controller:
         finally:
             with open(self.ai, 'wb') as f:
                 numpy.save(f, self.evolution.best_fit['weights'])
+
+    def develop_by_time(self, lenght):
+
+        """
+        Almost the same method as develop
+        but runs only as long as time argument
+        """
+        t = time.time()
+
+        try:
+            while time.time() < t + lenght:
+                self.__train()
+                print('')
+
+        finally:
+            print(self.evolution.best_fit['weights'])
+            with open(self.ai, 'wb') as file:
+                numpy.save(file, self.evolution.best_fit['weights'])
 
     def __train(self):
         """
