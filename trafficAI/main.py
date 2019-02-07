@@ -8,7 +8,9 @@ from control import Controller
 @click.option('--system', type=click.Path(exists=True))
 @click.option('--ai', type=click.Path(writable=True))
 @click.option('--mode', type=click.Choice(['run', 'train']))
-def main(system, ai, mode):
+@click.option('--dark', type=click.Choice(['y', 'n']))
+
+def main(system, ai, mode, dark):
     """
     TrafficAI command line tool
     """
@@ -16,10 +18,9 @@ def main(system, ai, mode):
     controller.load_system(system, ai)
 
     if mode == 'run':
-        controller.present()
+        controller.present(dark)
     elif mode == 'train':
         controller.develop()
-
 
 if __name__ == '__main__':
     main()

@@ -63,8 +63,10 @@ OBJECTS = {"j": junction, "l": link, "a": access}
 
 
 class Presenter:
-    def __init__(self, connections, minimap, screensize):
+    def __init__(self, connections, minimap, screensize, dark):
         """This class will innit the functionality"""
+        if(dark == 'y'):
+            self.setDark()
         self._init_window(screensize)
         self.connections = connections
         self.minimap = minimap
@@ -79,7 +81,7 @@ class Presenter:
         pygame.display.set_caption("Traffic Controlled By Neural Network")
 
         screen = pygame.display.set_mode(screensize)
-        screen.fill((255, 255, 255))
+        screen.fill(white)
 
     def _process(self):
         """Take minimap and connections and send then to draw"""
@@ -95,6 +97,16 @@ class Presenter:
 
         for source, dest in self.connections:
             self._process_connection(source=source, destination=dest)
+
+    def setDark(self):
+        global black,white, COLORS, cell_colors
+        tmp = black
+        black = white
+        white = tmp
+        COLORS = [white,black,white,white]
+        cell_colors = {cell_filled: black, cell_empty: white,
+               cell_green: green, cell_red: red}
+        print(white)
 
     def main_loop(self, core):
         """Main loopupdates of display"""

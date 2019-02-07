@@ -47,18 +47,21 @@ class Controller:
         self.layers = [side_neurons] + hidden_layers + [side_neurons]
         self.evolution = Evolution(self.layers)
 
-    def present(self):
+    def present(self, dark):
         """
         Called when the user wants to run the simulation with GUI
         """
         nn = self.evolution.get_nn(numpy.load(self.ai)) if self.ai else None
         self.core.reset(nn)
 
-        self.presenter = Presenter(self.connections, self.minimap, (900, 900))
+        self.presenter = Presenter(self.connections, self.minimap, (900, 900), dark)
         self.presenter.main_loop(self.core)
 
     def validate(self):
         pass
+
+    def dark(self):
+        self.presenter.setDark()
 
     def develop(self):
         """
